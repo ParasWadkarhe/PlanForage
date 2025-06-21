@@ -1,13 +1,18 @@
-import LoginButton from "./components/login";
-import LogoutButton from "./components/logout";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from "./components/Home";
+import LoginButton from "./components/LoginButton";
+import Chat from './components/Chat';
+// import LogoutButton from "./components/LogoutButton";
 
 const App = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">PlanForage</h1>
-      <LoginButton />
-      <LogoutButton />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginButton />} />
+        <Route path="/home" element={<Home />} />
+        <Route path='/chat' element={<Chat/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
