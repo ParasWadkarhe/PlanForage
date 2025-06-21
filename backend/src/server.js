@@ -12,7 +12,7 @@ const proposalFromId = require('./routes/proposalFromId.js')
 // config
 const app = express();
 const PORT = 3000;
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "").split(",");
 const databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost:27017/PlanForage';
 
 // db
