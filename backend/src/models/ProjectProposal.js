@@ -20,7 +20,7 @@ const RoleSchema = new mongoose.Schema({
     skills_required: [String],
     experience_required_in_years: Number,
     count: Number,
-    expected_salary: Number
+    expected_salary: String
 });
 
 const HRSchema = new mongoose.Schema({
@@ -38,7 +38,7 @@ const TechnologyStackSchema = new mongoose.Schema({
 const TimelineSchema = new mongoose.Schema({}, { strict: false }); // for week_1, week_2, ... dynamic keys
 
 const ProjectProposalSchema = new mongoose.Schema({
-    uid: Number,
+    uid: String,
     search_string: String,
     project_title: String,
     objective: String,

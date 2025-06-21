@@ -38,7 +38,7 @@ async function query(req, res) {
                     "skills_required": [],
                     "experience_required_in_years": 0,
                     "count": 0,
-                    "expected_salary": (calculate salary according to location ${req.body.location} and the role)
+                    "expected_salary": (calculate salary according to location ${req.body.location} and the role and give answer separated with commas and also in words)
                 }
             ]
         },
