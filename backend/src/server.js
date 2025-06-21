@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const query = require('./routes/query.js');
 const getSearchHistory = require('./routes/searchHistory.js');
 const proposalFromId = require('./routes/proposalFromId.js')
+const downloadPdf = require('./routes/downloadPdf.js');
 
 // config
 const app = express();
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 app.post('/query', query)
 app.get('/search-history/:uid', getSearchHistory)
 app.get('/fetch-proposal/:id', proposalFromId)
+app.post('/download-pdf', downloadPdf)
 
 // app
 app.listen(PORT, () => {
