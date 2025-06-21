@@ -20,7 +20,7 @@ const RoleSchema = new mongoose.Schema({
     skills_required: [String],
     experience_required_in_years: Number,
     count: Number,
-    expected_salary: Number
+    expected_salary: String
 });
 
 const HRSchema = new mongoose.Schema({
