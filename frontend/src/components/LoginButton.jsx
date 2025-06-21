@@ -36,7 +36,7 @@ function LoginButton() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
       <div className="relative w-full max-w-md sm:max-w-xl md:max-w-2xl">
 
         {/* Decorative blur elements */}
