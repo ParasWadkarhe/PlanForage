@@ -38,7 +38,7 @@ const TechnologyStackSchema = new mongoose.Schema({
 const TimelineSchema = new mongoose.Schema({}, { strict: false }); // for week_1, week_2, ... dynamic keys
 
 const ProjectProposalSchema = new mongoose.Schema({
-    uid: Number,
+    uid: String,
     search_string: String,
     project_title: String,
     objective: String,
