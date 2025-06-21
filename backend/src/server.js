@@ -28,7 +28,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type'],
 }));
 
-
 // routes
 app.get('/', (req, res) => {
   res.send('Backend running...');
@@ -36,7 +35,6 @@ app.get('/', (req, res) => {
 app.post('/query', query)
 app.get('/search-history/:uid', getSearchHistory)
 app.get('/fetch-proposal/:id', proposalFromId)
-
 
 // app
 app.listen(PORT, () => {
