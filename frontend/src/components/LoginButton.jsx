@@ -3,14 +3,19 @@ import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
 import { LogOut, User, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function LoginButton() {
   const [user, setUser] = useState(false);
+
+  const {isLoggedIn,setIsLoggedIn} = useContext(AuthContext)
 
   const onSuccess = (credentialResponse) => {
     const userData = jwtDecode(credentialResponse.credential);
     console.log("Login Success:", userData);
     setUser(true);
+    setIsLoggedIn(true);
   };
 
   const onError = () => {
@@ -25,6 +30,7 @@ function LoginButton() {
 
     localStorage.clear();
     setUser(false);
+    setIsLoggedIn(false);
     console.log("✅ User logged out.");
     alert("You have been logged out.");
   };
@@ -49,7 +55,7 @@ function LoginButton() {
               {user ? "Welcome Back!" : "Get Started"}
             </h2>
             <p className="text-gray-600 text-base sm:text-lg">
-              {user
+              {isLoggedIn
                 ? "You are successfully signed in"
                 : "Sign in to continue to your account"}
             </p>
@@ -57,7 +63,7 @@ function LoginButton() {
 
           {/* Auth section */}
           <div className="space-y-6">
-            {!user ? (
+            {!isLoggedIn ? (
               <div className="flex justify-center">
                 <GoogleLogin onSuccess={onSuccess} onError={onError} />
               </div>
@@ -93,7 +99,7 @@ function LoginButton() {
 
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-gray-200/50 text-center">
-            {!user ? (
+            {!isLoggedIn ? (
               <p className="text-gray-500 text-xs sm:text-sm">
                 Secure authentication powered by modern technology
               </p>
