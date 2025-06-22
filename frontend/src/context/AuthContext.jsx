@@ -1,50 +1,29 @@
-// AuthContext.jsx
-import { createContext, useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import { createContext, useState } from "react";
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userInfo, setUserInfo] = useState(null);
 
+  const [userInfo, setUserInfo] = useState(() => {
+    const storedUser = localStorage.getItem("userInfo");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
-    useEffect(() => {
-        const storedStatus = localStorage.getItem("isLoggedIn");
-        if (storedStatus === "true") {
-            setIsLoggedIn(true);
-        }
-    }, []);
+  const userLogIn = (userData) => {
+    setUserInfo(userData);
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+    console.log("User logged in:", userData);
+  };
 
+  const userLogOut = () => {
+      console.log("User logged out: ", userInfo);
+    setUserInfo(null);
+    localStorage.removeItem("userInfo");
+  };
 
-    useEffect(() => {
-        localStorage.setItem("isLoggedIn", isLoggedIn);
-
-        if (isLoggedIn) {
-            const storedUser = JSON.parse(localStorage.getItem("userInfo"));
-            setUserInfo(storedUser);
-        } else {
-            setUserInfo(null);
-        }
-    }, [isLoggedIn]);
-
-
-    useEffect(() => {
-        if (!userInfo) return;
-        localStorage.setItem("userInfo", JSON.stringify(userInfo));
-
-    }, [userInfo])
-
-
-    return (
-        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, userInfo, setUserInfo }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-// ✅ ESLint prop validation
-AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+  return (
+    <AuthContext.Provider value={{ userInfo, userLogIn, userLogOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

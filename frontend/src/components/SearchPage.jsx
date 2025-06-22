@@ -3,6 +3,7 @@ import { Search, ArrowRight, MapPin, DollarSign, Loader2, X } from 'lucide-react
 import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
+import { use } from 'react';
 
 export default function SearchPage({ searchHandler }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -12,7 +13,6 @@ export default function SearchPage({ searchHandler }) {
     const [searchHistory, setSearchHistory] = useState([])
     const searchHistoryId = useRef(null);
     const { userInfo } = useContext(AuthContext)
-    const navigate = useNavigate();
 
     const currencies = [
         { value: 'usd', label: 'USD ($)', symbol: '$' },
@@ -73,6 +73,8 @@ export default function SearchPage({ searchHandler }) {
     };
 
     useEffect(() => {
+        if(!userInfo) return;
+
         axios.get(import.meta.env.VITE_BACKEND_URL + '/search-history/' + userInfo?.sub)
             .then(response => {
                 setSearchHistory(response.data.proposals || []);
@@ -84,14 +86,8 @@ export default function SearchPage({ searchHandler }) {
         return () => {
 
         }
-    }, [])
+    }, [userInfo]);
 
-    useEffect(() => {
-      if(userInfo) return
-
-      navigate('/login');    
-    }, [userInfo])
-    
 
     // Loading Screen Component
     if (isLoading) {

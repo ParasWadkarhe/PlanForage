@@ -8,27 +8,18 @@ import { Zap, Brain, Clock, Target } from 'lucide-react';
 
 function LoginButton() {
     const navigate = useNavigate();
-    const {setIsLoggedIn, setUserInfo, userInfo} = useContext(AuthContext)
+    const {userLogIn} = useContext(AuthContext)
 
     const onSuccess = (credentialResponse) => {
         const userInfo = jwtDecode(credentialResponse.credential);
-        setUserInfo(userInfo);
-        setIsLoggedIn(true);
+        userLogIn(userInfo);
         navigate("/");
     };
 
     const onError = () => {
         console.log("Login Failed");
-        setUserInfo(null)
-        setIsLoggedIn(false);
         alert("Login failed. Please try again.");
     };
-
-    useEffect(() => {
-        if(!userInfo) return
-        console.log("User logged in successfully.");
-        navigate("/");
-    }, [userInfo])
 
     const features = [
         {

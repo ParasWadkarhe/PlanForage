@@ -1,11 +1,11 @@
 import { LogOut, Sun, Moon } from 'lucide-react';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
 
-    const { setIsLoggedIn, userInfo, setUserInfo } = useContext(AuthContext)
+    const { userLogOut, userInfo } = useContext(AuthContext)
     const navigate = useNavigate();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -23,9 +23,7 @@ export default function Navbar() {
         if (window.google?.accounts?.id) {
             window.google.accounts.id.disableAutoSelect();
         }
-
-        setIsLoggedIn(false);
-        setUserInfo(null);
+        userLogOut()
         navigate("/login");
         console.log("User logged out.");
     };
