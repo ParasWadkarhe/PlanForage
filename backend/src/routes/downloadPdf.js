@@ -1,33 +1,35 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const handlebars = require('handlebars');
-const pdf = require('html-pdf');const path = require('path');
+const puppeteer = require('puppeteer');
+const path = require('path');
+
 const templatePath = path.join(__dirname, '..', 'templates', 'template1.html');
 
-
-function downloadPdf(req, res) {
-  const html = fs.readFileSync(templatePath, 'utf8');
-  const template = handlebars.compile(html);
-  const htmlToRender = template(req.body.data);
-  const options = { format: 'A4' };
-
+async function downloadPdf(req, res) {
   try {
-      pdf.create(htmlToRender, options).toBuffer((err, buffer) => {
-        if (err) {
-          console.error('Error generating PDF:', err);
-          return res.status(500).send('Failed to generate PDF');
-        }
+    const html = await fs.readFile(templatePath, 'utf8');
+    const template = handlebars.compile(html);
+    const htmlToRender = template(req.body.data);
+
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    await page.setContent(htmlToRender, { waitUntil: 'networkidle0' });
+
+    const pdfBuffer = await page.pdf({ format: 'A4' });
+    await browser.close();
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename=output.pdf'
+    });
+    res.send(pdfBuffer);
     
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=output.pdf');
-        res.send(buffer);
-      });
-  } 
-  catch (error) {
-        console.error('Error reading template or generating PDF:', error);
-        return res.status(500).send({error: 'Failed to generate PDF'});
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    res.status(500).send({ error: 'Failed to generate PDF' });
   }
-
 }
-
 
 module.exports = downloadPdf;
