@@ -46,11 +46,11 @@ function LoginButton() {
                 {/* Left Side - Product Description */}
                 <div className="space-y-8 text-center lg:text-left">
                     <div className="space-y-4">
-                        <div className="flex items-center justify-center lg:justify-start space-x-2">
+                        <div className="flex items-center justify-center lg:justify-start py-4 space-x-2">
                             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                                 <Zap className="w-5 h-5 text-white" />
                             </div>
-                            <h1 className="text-3xl font-bold text-gray-900">PlanForage</h1>
+                            <h1 className="text-3xl font-bold text-blue-600">PlanForage</h1>
                         </div>
                         
                         <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
