@@ -1,10 +1,14 @@
 import { Download, Calendar, Users, Code, Target, CheckCircle, List, DollarSign, FileText } from 'lucide-react';
 import { IoArrowBack } from 'react-icons/io5';
+import { useState } from 'react';
 import axios from 'axios';
 
 export default function ProjectDisplay({ data, onBackToSearch }) {
+    const [isDownloading, setIsDownloading] = useState(false);
 
     const handleDownloadPDF = () => {
+        setIsDownloading(true);
+        
         axios.post(import.meta.env.VITE_BACKEND_URL + '/download-pdf',
             { data },
             { responseType: 'blob' },
@@ -21,6 +25,9 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
             })
             .catch((error) => {
                 console.error('PDF download failed:', error);
+            })
+            .finally(() => {
+                setIsDownloading(false);
             });
     };
 
@@ -71,10 +78,24 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
 
                     <button
                         onClick={handleDownloadPDF}
-                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        disabled={isDownloading}
+                        className={`inline-flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                            isDownloading 
+                                ? 'text-gray-500 cursor-not-allowed' 
+                                : 'text-blue-600 hover:text-blue-700'
+                        }`}
                     >
-                        <Download className="w-4 h-4 mr-2" />
-                        Download PDF
+                        {isDownloading ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-gray-300  border-t-blue-600 rounded-full animate-spin mr-2"></div>
+                                Generating PDF...
+                            </>
+                        ) : (
+                            <>
+                                <Download className="w-4 h-4 mr-2" />
+                                Download PDF
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
