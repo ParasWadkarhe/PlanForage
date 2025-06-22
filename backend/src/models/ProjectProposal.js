@@ -29,10 +29,7 @@ const HRSchema = new mongoose.Schema({
 });
 
 const TechnologyStackSchema = new mongoose.Schema({
-    frontend: [String],
-    backend: [String],
-    nlp_or_ai: [String],
-    database: [String]
+    
 });
 
 const TimelineSchema = new mongoose.Schema({}, { strict: false }); // for week_1, week_2, ... dynamic keys
@@ -48,7 +45,7 @@ const ProjectProposalSchema = new mongoose.Schema({
     HR: HRSchema,
     deliverables: [String],
     steps: [StepSchema],
-    estimated_pricing: mongoose.Schema.Types.Mixed,
+    estimated_pricing: String,
     conclusion: String
 });
 

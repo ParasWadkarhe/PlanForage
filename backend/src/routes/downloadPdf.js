@@ -7,7 +7,7 @@ const templatePath = path.join(__dirname, '..', 'templates', 'template1.html');
 function downloadPdf(req, res) {
   const html = fs.readFileSync(templatePath, 'utf8');
   const template = handlebars.compile(html);
-  const htmlToRender = template(req.body);
+  const htmlToRender = template(req.body.data);
   const options = { format: 'A4' };
 
   try {

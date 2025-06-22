@@ -6,29 +6,45 @@ import PropTypes from "prop-types";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const storedStatus = localStorage.getItem("isLoggedIn");
-    if (storedStatus === "true") {
-      setIsLoggedIn(true);
-    }
-  }, []);
 
-  // Save login status to localStorage
-  useEffect(() => {
-    localStorage.setItem("isLoggedIn", isLoggedIn);
-  }, [isLoggedIn]);
+    useEffect(() => {
+        const storedStatus = localStorage.getItem("isLoggedIn");
+        if (storedStatus === "true") {
+            setIsLoggedIn(true);
+        }
+    }, []);
 
-  return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-      {children}
-    </AuthContext.Provider>
-  );
+
+    useEffect(() => {
+        localStorage.setItem("isLoggedIn", isLoggedIn);
+
+        if (isLoggedIn) {
+            const storedUser = JSON.parse(localStorage.getItem("userInfo"));
+            setUserInfo(storedUser);
+        } else {
+            setUserInfo(null);
+        }
+    }, [isLoggedIn]);
+
+
+    useEffect(() => {
+        if (!userInfo) return;
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+    }, [userInfo])
+
+
+    return (
+        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, userInfo, setUserInfo }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 // ✅ ESLint prop validation
 AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired,
 };

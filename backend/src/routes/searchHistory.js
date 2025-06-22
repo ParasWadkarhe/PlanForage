@@ -9,7 +9,7 @@ async function getSearchHistory(req, res) {
     }
 
     const response = await ProjectProposalModel.findByUid(uid);
-    res.status(200).json({ response });
+    res.status(200).json({ ...response });
 }
 
 module.exports = getSearchHistory

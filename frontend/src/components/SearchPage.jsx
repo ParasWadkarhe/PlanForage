@@ -1,0 +1,267 @@
+import { useState, useEffect, useRef, useContext } from 'react';
+import { Search, ArrowRight, MapPin, DollarSign, Loader2, X } from 'lucide-react';
+import axios from 'axios';
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
+
+export default function SearchPage({ searchHandler }) {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [location, setLocation] = useState('Anywhere');
+    const [currency, setCurrency] = useState('usd');
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchHistory, setSearchHistory] = useState([])
+    const searchHistoryId = useRef(null);
+    const { userInfo } = useContext(AuthContext)
+    const navigate = useNavigate();
+
+    const currencies = [
+        { value: 'usd', label: 'USD ($)', symbol: '$' },
+        { value: 'inr', label: 'INR (₹)', symbol: '₹' },
+        { value: 'eur', label: 'EUR (€)', symbol: '€' },
+        { value: 'gbp', label: 'GBP (£)', symbol: '£' },
+        { value: 'jpy', label: 'JPY (¥)', symbol: '¥' },
+        { value: 'cad', label: 'CAD (C$)', symbol: 'C$' },
+        { value: 'aud', label: 'AUD (A$)', symbol: 'A$' },
+    ];
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (searchQuery.trim() && !isLoading) {
+            setIsLoading(true);
+            try {
+                const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/query', {
+                    query: searchQuery,
+                    location: location,
+                    currency: currency,
+                    uid: userInfo?.sub,
+                    _id: searchHistoryId.current || null
+                });
+                searchHandler(response.data);
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+            } finally {
+                setIsLoading(false);
+
+            }
+        }
+    };
+
+    const handleInputChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleLocationChange = (e) => {
+        setLocation(e.target.value);
+    };
+
+    const handleCurrencyChange = (e) => {
+        setCurrency(e.target.value);
+    };
+
+    const handleDeleteHistory = async (itemId) => {
+        try {
+            setSearchHistory(prevHistory => prevHistory.filter(item => item._id !== itemId));
+
+            axios.delete(import.meta.env.VITE_BACKEND_URL + '/delete-proposal/' + itemId)
+                .then(response => {
+                    // console.log('Search history deleted:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error deleting search history:', error);
+                });
+        } catch (error) {
+            console.error('Error deleting search history:', error);
+        }
+    };
+
+    useEffect(() => {
+        axios.get(import.meta.env.VITE_BACKEND_URL + '/search-history/' + userInfo?.sub)
+            .then(response => {
+                setSearchHistory(response.data.proposals || []);
+            })
+            .catch(error => {
+                console.error('Error fetching search history:', error);
+            });
+
+        return () => {
+
+        }
+    }, [])
+
+    useEffect(() => {
+      if(userInfo) return
+
+      navigate('/login');    
+    }, [userInfo])
+    
+
+    // Loading Screen Component
+    if (isLoading) {
+        return (
+            <div className="min-h-[calc(100vh-100px)] bg-white flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+                <div className="text-center">
+                    <div className="mb-6">
+                        <Loader2 className="h-12 w-12 text-blue-600 animate-spin mx-auto" />
+                    </div>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                        Analyzing Your Project
+                    </h2>
+                    <p className="text-gray-600 max-w-md mx-auto">
+                        Our AI is processing your request and generating a comprehensive project plan.
+                        This may take a few moments...
+                    </p>
+                    <div className="mt-6">
+                        <div className="flex justify-center space-x-1">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-[calc(100vh-100px)] bg-white flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mx-auto text-center">
+                {/* Brand Name */}
+                <div className="mb-8">
+                    <h1 className="text-4xl sm:text-5xl font-semibold text-blue-600 mb-4">
+                        PlanForage
+                    </h1>
+                    <div className="w-16 h-0.5 bg-blue-600 mx-auto"></div>
+                </div>
+
+                {/* Intro Text */}
+                <div className="mb-12">
+                    <h2 className="text-xl sm:text-2xl text-gray-900 font-medium mb-4">
+                        Discover and Plan Your Next Project
+                    </h2>
+                    <p className="text-gray-600 leading-relaxed max-w-xl mx-auto">
+                        Get comprehensive project plans, technology recommendations, timeline estimates,
+                        and resource requirements tailored to your needs. Start your journey with intelligent
+                        project planning.
+                    </p>
+                </div>
+
+                {/* Location and Currency Inputs */}
+                <div className="mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+                        {/* Location Input */}
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <MapPin className="h-4 w-4 text-gray-400" />
+                            </div>
+                            <input
+                                type="text"
+                                value={location}
+                                onChange={handleLocationChange}
+                                placeholder="Location"
+                                className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            />
+                        </div>
+
+                        {/* Currency Selector */}
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <DollarSign className="h-4 w-4 text-gray-400" />
+                            </div>
+                            <select
+                                value={currency}
+                                onChange={handleCurrencyChange}
+                                className="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-white"
+                            >
+                                {currencies.map((curr) => (
+                                    <option key={curr.value} value={curr.value}>
+                                        {curr.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Search Bar */}
+                <div className="mb-8">
+                    <div className="relative max-w-lg mx-auto">
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <Search className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={handleInputChange}
+                                onKeyPress={(e) => e.key === 'Enter' && handleSearch(e)}
+                                placeholder="Describe your project idea..."
+                                className="block w-full pl-12 pr-12 py-4 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            />
+                            <button
+                                onClick={handleSearch}
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-600 hover:text-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={!searchQuery.trim() || isLoading}
+                            >
+                                {isLoading ? (
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                ) : (
+                                    <ArrowRight className={`h-5 w-5 ${!searchQuery.trim() ? 'opacity-50' : ''}`} />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Search History */}
+                {searchHistory.length > 0 && (
+                    <div className="mb-8 max-w-lg mx-auto">
+                        <h3 className="text-sm text-gray-500 mb-4">Your Previous Searches:</h3>
+                        <div className="flex flex-wrap gap-2">
+                            {searchHistory.map((item) => (
+                                <div key={item._id} className="flex items-center gap-1 bg-gray-100 hover:bg-blue-50 rounded-full transition-colors duration-200">
+                                    <button
+                                        onClick={() => {
+                                            setSearchQuery(item.search_string)
+                                            searchHistoryId.current = item._id;
+                                        }}
+                                        className="px-3 py-1 text-sm text-gray-700 hover:text-blue-700 transition-colors duration-200"
+                                    >
+                                        {item.search_string}
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteHistory(item._id)}
+                                        className="p-1 text-gray-400 hover:text-red-500 transition-colors duration-200"
+                                    >
+                                        <X className="h-3 w-3" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Quick Examples */}
+                {searchHistory.length <= 0 && <div className="text-center">
+                    <p className="text-sm text-gray-500 mb-3">Try searching for:</p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                        {[
+                            'E-commerce website',
+                            'Mobile app',
+                            'AI chatbot',
+                            'Analytics dashboard'
+                        ].map((example, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setSearchQuery(example)}
+                                className="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={isLoading}
+                            >
+                                {example}
+                            </button>
+                        ))}
+                    </div>
+                </div>}
+            </div>
+        </div>
+    );
+}
