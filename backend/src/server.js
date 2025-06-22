@@ -19,21 +19,21 @@ const databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost:27017/PlanF
 
 // db
 mongoose.connect(databaseUrl)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // middlewares
 app.use(express.json());
 app.use(cors({
-  origin: allowedOrigins, 
-  methods: ['GET', 'POST', 'DELETE'],
-  allowedHeaders: ['Content-Type'],
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type'],
 }));
 
 
 // routes
 app.get('/', (req, res) => {
-  res.send('Backend running...');
+    res.send('Backend running...');
 });
 app.post('/query', query)
 app.get('/search-history/:uid', getSearchHistory)
@@ -44,5 +44,5 @@ app.delete('/delete-proposal/:id', deleteProposal)
 
 // app
 app.listen(PORT, () => {
-  console.log(`Server running on port...`);
+    console.log(`Server running on port...`);
 });
