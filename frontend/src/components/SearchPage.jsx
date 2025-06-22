@@ -63,9 +63,7 @@ export default function SearchPage({ searchHandler }) {
             setSearchHistory(prevHistory => prevHistory.filter(item => item._id !== itemId));
 
             axios.delete(import.meta.env.VITE_BACKEND_URL + '/delete-proposal/' + itemId)
-                .then(response => {
-                    // console.log('Search history deleted:', response.data);
-                })
+                .then()
                 .catch(error => {
                     console.error('Error deleting search history:', error);
                 });

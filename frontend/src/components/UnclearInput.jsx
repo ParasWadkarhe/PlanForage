@@ -1,7 +1,7 @@
 
 import { AlertCircle } from 'lucide-react';
 
-export default function UnclearInput({ data, onRetry, onBackToSearch, originalQuery = '' }) {
+export default function UnclearInput({ data, onBackToSearch, originalQuery = '' }) {
 
 
     return (
@@ -22,7 +22,7 @@ export default function UnclearInput({ data, onRetry, onBackToSearch, originalQu
                     </p>
                     {originalQuery && (
                         <p className="text-sm text-gray-500 italic">
-                            Your query: "{originalQuery}"
+                            Your query: {"{"}{originalQuery}{"}"}
                         </p>
                     )}
                 </div>
