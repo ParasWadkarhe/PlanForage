@@ -14,6 +14,7 @@ async function downloadPdf(req, res) {
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
+    console.log(await browser.version());
     const page = await browser.newPage();
     await page.setContent(htmlToRender, { waitUntil: 'networkidle0' });
 

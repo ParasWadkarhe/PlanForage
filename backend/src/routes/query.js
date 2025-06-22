@@ -5,12 +5,9 @@ const ProjectProposalModel = require("../models/ProjectProposal.js");
 // utility imports
 const removeAllIds = require("./utils/removeAllIds.js");
 
-// const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
-const ai = new GoogleGenAI({ apiKey: "AIzaSyD1vcwLjnr8wkPT3LXDTahJytav9sG5zIo" }); // temporary so everyone can test
+const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
-// add links to hire developers, designers, etc. in the respective ro
-
-
+// add links to hire developers, designers, etc. in the respective roles
 async function query(req, res) {
 
     // if _id is present then fetch the proposal from the database else return a test response
