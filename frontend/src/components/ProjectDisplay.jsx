@@ -67,7 +67,7 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
 
                 <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">{data.project_title}</h1>
 
-                <div className="w-full md:w-auto flex md:items-center order-first md:order-none">
+                <div className="w-full md:w-auto justify-between flex md:items-center order-first md:order-none">
                     <button
                         onClick={() => onBackToSearch(null)}
                         className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 mr-4"
