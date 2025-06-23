@@ -17,8 +17,7 @@ function LoginButton() {
     };
 
     const onError = () => {
-        console.log("Login Failed");
-        alert("Login failed. Please try again.");
+        alert("Login Failed. Please try again.");
     };
 
     const features = [

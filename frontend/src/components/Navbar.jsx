@@ -16,7 +16,6 @@ export default function Navbar() {
         }
         userLogOut()
         navigate("/login");
-        console.log("User logged out.");
     };
 
     const toggleProfileMenu = () => {

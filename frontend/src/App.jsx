@@ -6,10 +6,8 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
-
     const { userInfo } = useContext(AuthContext);
     const navigate = useNavigate();
-
 
     useEffect(() => {
         if (!userInfo) {

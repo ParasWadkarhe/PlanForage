@@ -33,14 +33,14 @@ app.use(cors({
 
 // routes
 app.get('/', (req, res) => {
-    res.send('Backend running...');
+    // this route is for client to check whether the backend is running
+    res.json({isRunning: true, message: 'Backend running...'});
 });
 app.post('/query', query)
 app.get('/search-history/:uid', getSearchHistory)
 app.get('/fetch-proposal/:id', proposalFromId)
 app.post('/download-pdf', downloadPdf)
 app.delete('/delete-proposal/:id', deleteProposal)
-
 
 // app
 app.listen(PORT, () => {

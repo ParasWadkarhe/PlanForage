@@ -20,10 +20,6 @@ async function query(req, res) {
         }
     }
 
-    // console.log(req.body._id)
-    // res.json({ message: "This is a test response. The AI model is currently being set up.", error:true });
-    // return
-
     const prompt = `
         You are a project proposal generation assistant.
         Given a short client input describing their needs, analyze the request and return a complete and structured project proposal in JSON format. 
