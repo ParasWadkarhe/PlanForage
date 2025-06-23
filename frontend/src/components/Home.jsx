@@ -22,12 +22,7 @@ const Home = () => {
             .catch(error => {
                 console.error(error)
             })
-    
-      return () => {
-        
-      }
     }, [])
-    
 
     return !isLoading ? (
         <div className="bg-white dark:bg-gray-900">

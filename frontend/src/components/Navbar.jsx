@@ -1,4 +1,4 @@
-import { LogOut, Sun, Moon } from 'lucide-react';
+import { LogOut, Sun, Moon, User } from 'lucide-react';
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ export default function Navbar() {
     const navigate = useNavigate();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+    const [imageError, setImageError] = useState(false);
 
     const handleLogout = () => {
         if (window.google?.accounts?.id) {
@@ -58,14 +59,22 @@ export default function Navbar() {
 
                     {/* Profile Menu */}
                     <div className="flex items-center relative">
-                        {userInfo?.picture && (
+                        {userInfo?.picture && !imageError ? (
                             <img
                                 src={userInfo.picture}
                                 alt="Profile"
                                 onClick={toggleProfileMenu}
+                                onError={() => setImageError(true)}
                                 className="w-8 h-8 rounded-full cursor-pointer"
                             />
+                        ) : (
+                            <User
+                                onClick={toggleProfileMenu}
+                                className="w-8 h-8 text-gray-600 dark:text-gray-300 cursor-pointer border-[1.5px] rounded-full"
+                                strokeWidth={1.5}
+                            />
                         )}
+
                         {isProfileMenuOpen && (
                             <>
                                 {/* Backdrop for mobile */}
