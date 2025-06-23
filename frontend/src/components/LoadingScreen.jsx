@@ -4,7 +4,7 @@ import { Loader } from 'lucide-react';
 export default function LoadingScreen() {
   
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className=" min-h-[100svh] flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
 
       {/* Loading Content */}
       <div className="text-center">
