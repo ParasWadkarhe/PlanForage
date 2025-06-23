@@ -42,7 +42,6 @@ function LoginButton() {
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
-            document.documentElement.classList.add('dark');
             setIsDarkMode(true)
         } else {
             setIsDarkMode(false)
