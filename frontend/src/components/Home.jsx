@@ -13,7 +13,7 @@ const Home = () => {
     }
     
     return (
-        <div className="bg-white dark:bg-gray-900">
+        <div className="bg-white dark:bg-gray-900 min-h-[100svh]">
             <Navbar />
             {!projectData && <SearchPage searchHandler={handleSearch} />}
             {projectData && !projectData.error && <ProjectDisplay data={projectData} onBackToSearch={handleSearch} />}
