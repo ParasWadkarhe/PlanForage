@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from "./components/Home";
 import Login from "./components/Login";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
@@ -10,9 +10,10 @@ const ProtectedRoute = ({ children }) => {
     const { userInfo } = useContext(AuthContext);
     const navigate = useNavigate();
 
+
     useEffect(() => {
         if (!userInfo) {
-            navigate("/login"); 
+            navigate("/login");
         }
     }, [userInfo, navigate]);
 
@@ -21,19 +22,22 @@ const ProtectedRoute = ({ children }) => {
 
 
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={
-            <ProtectedRoute >
-                <Home />
-            </ProtectedRoute>
-        } />
-        <Route path="*" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
-  );
+
+    
+
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={
+                    <ProtectedRoute >
+                        <Home />
+                    </ProtectedRoute>
+                } />
+                <Route path="*" element={<Login />} />
+            </Routes>
+        </BrowserRouter>
+    );
 };
 
 export default App;

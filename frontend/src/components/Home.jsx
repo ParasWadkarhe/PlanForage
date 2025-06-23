@@ -12,12 +12,12 @@ const Home = () => {
     }
 
     return (
-        <>
+        <div className="bg-white dark:bg-gray-900">
             <Navbar />
             {!projectData && <SearchPage searchHandler={handleSearch} />}
             {projectData && !projectData.error && <ProjectDisplay data={projectData} onBackToSearch={handleSearch} />}
             {projectData && projectData.error && <UnclearInput data={projectData} onBackToSearch={handleSearch} />}
-        </>
+        </div>
     )
 }
 
