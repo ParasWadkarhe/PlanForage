@@ -229,10 +229,10 @@ return (
                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Try searching for:</p>
                <div className="flex flex-wrap justify-center gap-2">
                    {[
-                       'E-commerce website',
-                       'Mobile app',
-                       'AI chatbot',
-                       'Analytics dashboard'
+                       'Mobile app for video conferencing',
+                       'Analytics dashboard for E-commerce website',
+                       'AI chatbot for document summary',
+                       'Project management tool with AI task prioritization'
                    ].map((example, index) => (
                        <button
                            key={index}
