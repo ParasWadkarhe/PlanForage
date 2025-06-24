@@ -3,462 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{project_title}} - Project Report</title>
+    <title>{{project_title}} - Project Proposal</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #374151;
-            background-color: #ffffff;
-        }
-
-        .container {
-            max-width: 1152px;
-            margin: 0 auto;
-            padding: 24px;
-            background-color: white;
-        }
-
-        .header {
-            margin-bottom: 32px;
-        }
-
-        .header h1 {
-            font-size: 30px;
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: #6b7280;
-        }
-
-        .section {
-            margin-bottom: 32px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            color: #2563eb;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 500;
-            color: #111827;
-        }
-
-        .objective-text {
-            color: #374151;
-            line-height: 1.6;
-        }
-
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
-        }
-
-        .module-item {
-            background-color: #f9fafb;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #374151;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
-
-        .tech-category h4 {
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 8px;
-            text-transform: capitalize;
-        }
-
-        .tech-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .tech-list li {
-            font-size: 14px;
-            color: #374151;
-            background-color: #dbeafe;
-            padding: 8px;
-            border-radius: 4px;
-        }
-
-        .timeline-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-        }
-
-        .timeline-item {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .timeline-item h4 {
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 8px;
-            text-transform: capitalize;
-        }
-
-        .timeline-item ul {
-            list-style: none;
-        }
-
-        .timeline-item li {
-            font-size: 14px;
-            color: #4b5563;
-            margin-bottom: 4px;
-            position: relative;
-            padding-left: 16px;
-        }
-
-        .timeline-item li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #4b5563;
-        }
-
-        .hr-summary {
-            margin-bottom: 16px;
-        }
-
-        .hr-summary h4 {
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 4px;
-        }
-
-        .total-count {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2563eb;
-        }
-
-        .roles-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .roles-table th {
-            background-color: #f9fafb;
-            padding: 12px;
-            text-align: left;
-            font-weight: 500;
-            color: #111827;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .roles-table td {
-            padding: 12px;
-            border-bottom: 1px solid #f3f4f6;
-            vertical-align: top;
-        }
-
-        .roles-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .skills-list {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .skills-list li {
-            background-color: #f3f4f6;
-            color: #374151;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .role-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
-        }
-
-        .role-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .role-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 8px;
-        }
-
-        .role-title {
-            font-weight: 500;
-            color: #111827;
-        }
-
-        .role-count {
-            font-size: 14px;
-            font-weight: 500;
-            color: #2563eb;
-        }
-
-        .role-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .role-detail {
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .role-detail-label {
-            color: #6b7280;
-            margin-right: 8px;
-            min-width: 80px;
-        }
-
-        .role-detail-value {
-            color: #111827;
-        }
-
-        .deliverables-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 8px;
-        }
-
-        .deliverable-item {
-            display: flex;
-            align-items: center;
-            color: #374151;
-        }
-
-        .deliverable-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #2563eb;
-            border-radius: 50%;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .steps-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .step-item {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .step-number {
-            font-size: 14px;
-            font-weight: 500;
-            color: #111827;
-        }
-
-        .step-type {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-left: 12px;
-        }
-
-        .step-type.planning {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .step-type.development {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-
-        .step-type.testing {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .step-type.deployment {
-            background-color: #fce7f3;
-            color: #be185d;
-        }
-
-        .step-time {
-            font-size: 14px;
-            color: #6b7280;
-        }
-
-        .step-description {
-            color: #374151;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .pricing-conclusion-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-        }
-
-        .pricing-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pricing-box h4 {
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 8px;
-        }
-
-        .pricing-amount {
-            font-size: 32px;
-            font-weight: 600;
-            color: #2563eb;
-        }
-
-        .conclusion-box h4 {
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 12px;
-        }
-
-        .conclusion-text {
-            color: #374151;
-            line-height: 1.6;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: #f8fafc; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { text-align: center; padding: 40px 0; border-bottom: 3px solid #3b82f6; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5rem; color: #1e40af; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.1rem; color: #64748b; }
+        .input-summary { background: #f1f5f9; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .input-summary h2 { color: #475569; margin-bottom: 15px; font-size: 1.3rem; }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .input-item { background: white; padding: 15px; border-radius: 6px; border-left: 4px solid #3b82f6; }
+        .input-item label { font-weight: 600; color: #374151; display: block; margin-bottom: 5px; }
+        .input-item span { color: #1f2937; }
+        .section { margin-bottom: 40px; padding: 25px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fdfdfd; }
+        .section-title { font-size: 1.8rem; color: #1e40af; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; }
+        .section-title svg { margin-right: 10px; }
+        .objective { font-size: 1.1rem; line-height: 1.8; color: #374151; }
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .module-card { background: #f8fafc; padding: 18px; border-radius: 6px; border-left: 4px solid #10b981; }
+        .module-card h4 { color: #065f46; margin-bottom: 8px; }
+        .tech-stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .tech-category { background: #f1f5f9; padding: 18px; border-radius: 6px; }
+        .tech-category h4 { color: #1e40af; margin-bottom: 12px; font-size: 1.1rem; }
+        .tech-list { list-style: none; }
+        .tech-list li { padding: 5px 0; color: #374151; position: relative; padding-left: 20px; }
+        .tech-list li:before { content: "•"; color: #3b82f6; position: absolute; left: 0; }
+        .timeline { display: grid; gap: 20px; }
+        .week-item { background: #f8fafc; padding: 20px; border-radius: 6px; border-left: 4px solid #f59e0b; }
+        .week-title { color: #92400e; font-weight: 600; margin-bottom: 12px; font-size: 1.1rem; }
+        .task-list { list-style: none; }
+        .task-list li { padding: 8px 0; color: #374151; border-bottom: 1px solid #e5e7eb; }
+        .task-list li:last-child { border-bottom: none; }
+        .hr-summary { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .hr-total { font-size: 1.2rem; font-weight: 600; color: #065f46; }
+        .roles-grid { display: grid; gap: 15px; }
+        .role-card { background: white; padding: 18px; border-radius: 6px; border: 1px solid #d1d5db; }
+        .role-header { display: flex; justify-content: between; align-items: center; margin-bottom: 10px; }
+        .role-title { color: #1f2937; font-weight: 600; }
+        .role-salary { color: #059669; font-weight: 600; }
+        .role-details { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; color: #6b7280; font-size: 0.9rem; }
+        .software-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .software-card { background: #f9fafb; padding: 18px; border-radius: 6px; border: 1px solid #e5e7eb; }
+        .software-header { display: flex; justify-content: between; align-items: center; margin-bottom: 10px; }
+        .software-name { font-weight: 600; color: #1f2937; }
+        .software-cost { color: #dc2626; font-weight: 600; }
+        .software-details { color: #6b7280; font-size: 0.9rem; }
+        .license-tag { display: inline-block; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-top: 5px; }
+        .deliverables-list { list-style: none; }
+        .deliverables-list li { padding: 12px 0; border-bottom: 1px solid #e5e7eb; position: relative; padding-left: 30px; }
+        .deliverables-list li:before { content: "✓"; color: #10b981; position: absolute; left: 0; font-weight: bold; }
+        .steps-list { list-style: none; counter-reset: step-counter; }
+        .steps-list li { padding: 15px 0; border-bottom: 1px solid #e5e7eb; position: relative; padding-left: 50px; counter-increment: step-counter; }
+        .steps-list li:before { content: counter(step-counter); position: absolute; left: 0; top: 15px; background: #3b82f6; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; }
+        .step-type { background: #e0e7ff; color: #3730a3; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 8px; display: inline-block; }
+        .step-time { color: #f59e0b; font-weight: 600; font-size: 0.9rem; }
+        .pricing-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .cost-block { background: #f8fafc; padding: 20px; border-radius: 8px; }
+        .cost-title { color: #1e40af; font-size: 1.2rem; margin-bottom: 15px; }
+        .cost-breakdown { list-style: none; margin-bottom: 15px; }
+        .cost-breakdown li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
+        .cost-breakdown li:last-child { border-bottom: none; }
+        .cost-total { border-top: 2px solid #3b82f6; padding-top: 10px; font-weight: 600; color: #1e40af; font-size: 1.1rem; display: flex; justify-content: space-between; }
+        .payment-schedule { background: #f0fdf4; padding: 20px; border-radius: 8px; }
+        .payment-list { list-style: none; }
+        .payment-list li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #bbf7d0; }
+        .payment-list li:last-child { border-bottom: none; }
+        .payment-milestone { color: #166534; font-weight: 500; }
+        .payment-amount { color: #059669; font-weight: 600; }
+        .conclusion { font-size: 1.1rem; line-height: 1.8; color: #374151; background: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #3b82f6; }
+        .footer { text-align: center; padding: 20px 0; color: #9ca3af; font-size: 0.9rem; border-top: 1px solid #e5e7eb; margin-top: 40px; }
+        .icon { width: 24px; height: 24px; fill: currentColor; }
         @media (max-width: 768px) {
-            .container {
-                padding: 16px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .section-title {
-                font-size: 18px;
-            }
-
-            .tech-grid,
-            .timeline-container,
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .roles-table {
-                font-size: 14px;
-            }
-
-            .roles-table th,
-            .roles-table td {
-                padding: 8px;
-            }
+            .container { padding: 15px; }
+            .header h1 { font-size: 2rem; }
+            .pricing-section { grid-template-columns: 1fr; }
+            .input-grid { grid-template-columns: 1fr; }
+            .tech-stack { grid-template-columns: 1fr; }
+            .modules-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
+        <header class="header">
             <h1>{{project_title}}</h1>
-            <div class="subtitle">Project Report & Implementation Plan</div>
-        </div>
+            <p class="subtitle">Project Proposal and Implementation Plan</p>
+        </header>
 
-        <!-- Objective Section -->
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <h2 class="section-title">Objective</h2>
+        {{#if input_summary}}
+        <section class="input-summary">
+            <h2>Project Overview</h2>
+            <div class="input-grid">
+                <div class="input-item">
+                    <label>Query:</label>
+                    <span>{{input_summary.query}}</span>
+                </div>
+                <div class="input-item">
+                    <label>Budget:</label>
+                    <span>{{input_summary.budget}}</span>
+                </div>
+                <div class="input-item">
+                    <label>Location:</label>
+                    <span>{{input_summary.location}}</span>
+                </div>
             </div>
-            <div class="objective-text">
-                {{objective}}
-            </div>
-        </div>
-
-        <!-- Modules Section -->
-        {{#if modules}}
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                </svg>
-                <h2 class="section-title">Modules</h2>
-            </div>
-            <div class="modules-grid">
-                {{#each modules}}
-                <div class="module-item">{{this}}</div>
-                {{/each}}
-            </div>
-        </div>
+        </section>
         {{/if}}
 
-        <!-- Technology Stack Section -->
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                </svg>
-                <h2 class="section-title">Technology Stack</h2>
+        {{#if objective}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M9 11H7v8h2v-8zm4-4h-2v12h2V7zm4-4h-2v16h2V3z"/></svg>
+                Objective
+            </h2>
+            <div class="objective">{{objective}}</div>
+        </section>
+        {{/if}}
+
+        {{#if modules}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Modules
+            </h2>
+            <div class="modules-grid">
+                {{#each modules}}
+                <div class="module-card">
+                    <h4>{{this}}</h4>
+                </div>
+                {{/each}}
             </div>
-            <div class="tech-grid">
+        </section>
+        {{/if}}
+
+        {{#if technology_stack}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Technology Stack
+            </h2>
+            <div class="tech-stack">
                 {{#if technology_stack.frontend}}
                 <div class="tech-category">
-                    <h4>Frontend Technologies</h4>
+                    <h4>Frontend</h4>
                     <ul class="tech-list">
                         {{#each technology_stack.frontend}}
                         <li>{{this}}</li>
@@ -466,10 +155,9 @@
                     </ul>
                 </div>
                 {{/if}}
-
                 {{#if technology_stack.backend}}
                 <div class="tech-category">
-                    <h4>Backend Technologies</h4>
+                    <h4>Backend</h4>
                     <ul class="tech-list">
                         {{#each technology_stack.backend}}
                         <li>{{this}}</li>
@@ -477,21 +165,9 @@
                     </ul>
                 </div>
                 {{/if}}
-
-                {{#if technology_stack.nlp_or_ai}}
-                <div class="tech-category">
-                    <h4>NLP/AI Technologies</h4>
-                    <ul class="tech-list">
-                        {{#each technology_stack.nlp_or_ai}}
-                        <li>{{this}}</li>
-                        {{/each}}
-                    </ul>
-                </div>
-                {{/if}}
-
                 {{#if technology_stack.database}}
                 <div class="tech-category">
-                    <h4>Database Technologies</h4>
+                    <h4>Database</h4>
                     <ul class="tech-list">
                         {{#each technology_stack.database}}
                         <li>{{this}}</li>
@@ -499,22 +175,71 @@
                     </ul>
                 </div>
                 {{/if}}
+                {{#if technology_stack.nlp_ai}}
+                <div class="tech-category">
+                    <h4>NLP/AI</h4>
+                    <ul class="tech-list">
+                        {{#each technology_stack.nlp_ai}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+                {{#if technology_stack.devops}}
+                <div class="tech-category">
+                    <h4>DevOps</h4>
+                    <ul class="tech-list">
+                        {{#each technology_stack.devops}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+                {{#if technology_stack.mobile}}
+                <div class="tech-category">
+                    <h4>Mobile</h4>
+                    <ul class="tech-list">
+                        {{#each technology_stack.mobile}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+                {{#if technology_stack.cloud}}
+                <div class="tech-category">
+                    <h4>Cloud</h4>
+                    <ul class="tech-list">
+                        {{#each technology_stack.cloud}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+                {{#if technology_stack.testing}}
+                <div class="tech-category">
+                    <h4>Testing</h4>
+                    <ul class="tech-list">
+                        {{#each technology_stack.testing}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
             </div>
-        </div>
+        </section>
+        {{/if}}
 
-        <!-- Timeline Section -->
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                <h2 class="section-title">Timeline</h2>
-            </div>
-            <div class="timeline-container">
+        {{#if timeline}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c.15 1.58.08 3.26-.25 4.8-.14.65-.32 1.25-.56 1.8-.24.54-.56 1.04-.95 1.48l-.02.02c-.15.17-.32.33-.5.47-.36.29-.77.51-1.22.65-.22.07-.45.12-.68.14-.46.04-.92.02-1.37-.07-.89-.18-1.68-.57-2.28-1.11-.11-.1-.22-.21-.32-.32-.5-.56-.85-1.25-1.01-2.01-.08-.38-.1-.77-.06-1.16.08-.78.36-1.49.8-2.09.22-.3.48-.57.76-.8.14-.12.28-.23.43-.33.3-.2.62-.36.96-.47.17-.06.34-.1.52-.13.36-.06.73-.06 1.09.01.18.04.36.09.53.16.34.14.65.33.92.57.27.24.5.52.68.82.09.15.17.31.24.47.14.32.24.66.29 1.01.02.17.03.34.02.51-.01.17-.04.34-.08.5-.08.32-.21.62-.38.89-.17.27-.38.51-.62.71-.12.1-.24.19-.37.27-.26.16-.54.28-.84.35-.15.04-.3.06-.46.07-.32.02-.64-.02-.94-.12-.15-.05-.29-.12-.42-.2-.26-.16-.48-.37-.65-.62-.17-.25-.29-.53-.35-.82-.03-.14-.04-.29-.03-.43.02-.28.09-.55.21-.79.06-.12.13-.23.21-.33.16-.2.35-.36.57-.47.11-.06.22-.1.34-.13.24-.06.48-.06.72.01.12.03.23.08.34.14.21.12.38.29.5.49.06.1.11.21.14.32.06.22.06.45-.01.67-.03.11-.08.21-.14.3-.12.18-.28.33-.47.43-.09.05-.19.08-.29.1-.2.04-.41.02-.6-.06-.09-.04-.18-.09-.26-.15-.16-.12-.28-.28-.35-.46-.04-.09-.06-.18-.06-.28 0-.19.07-.37.2-.51.06-.07.14-.13.22-.17.16-.08.34-.1.51-.06.08.02.16.05.23.09.14.08.25.19.32.32.04.06.06.13.07.2.02.14-.01.28-.08.4-.03.06-.07.11-.12.15-.1.08-.22.12-.34.11-.06 0-.12-.02-.17-.04-.1-.04-.18-.11-.24-.19-.03-.04-.05-.08-.06-.13-.02-.09.01-.18.07-.25.03-.03.06-.06.1-.08.07-.04.15-.05.23-.03.04.01.07.03.1.05.06.04.1.09.12.15.01.03.02.06.02.09.01.06-.01.12-.04.17-.01.02-.03.04-.05.05-.04.02-.08.03-.12.02-.02 0-.04-.01-.05-.02-.03-.02-.05-.04-.06-.07 0-.01-.01-.02-.01-.03 0-.02.01-.04.02-.05.01-.01.02-.02.03-.02.02-.01.04-.01.06 0h.01c.01.01.02.02.02.03v.01c0 .01-.01.02-.02.02h-.01c-.01 0-.02 0-.02-.01 0 0-.01-.01-.01-.01v-.01s.01-.01.01-.01h.01s.01 0 .01.01v.01c0 .01-.01.01-.01.01h-.01z"/></svg>
+                Timeline
+            </h2>
+            <div class="timeline">
                 {{#each timeline}}
-                <div class="timeline-item">
-                    <h4>{{@key}}</h4>
-                    <ul>
+                <div class="week-item">
+                    <div class="week-title">{{@key}}</div>
+                    <ul class="task-list">
                         {{#each this}}
                         <li>{{this}}</li>
                         {{/each}}
@@ -522,164 +247,173 @@
                 </div>
                 {{/each}}
             </div>
-        </div>
+        </section>
+        {{/if}}
 
-        <!-- HR Requirements Section -->
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13 5.197v1M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                </svg>
-                <h2 class="section-title">Human Resources</h2>
-            </div>
-            
+        {{#if HR}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.99 2.99 0 0 0 17.08 7H16.5c-.8 0-1.54.37-2.01.99l-.49.74v2.27h2l.5-2H18v8h2z"/></svg>
+                HR Requirements
+            </h2>
             <div class="hr-summary">
-                <h4>Total Employees Required</h4>
-                <div class="total-count">{{HR.total_employees_required}}</div>
+                <div class="hr-total">Total Employees Required: {{HR.total_employees_required}}</div>
             </div>
-
-            {{#if HR.roles}}
-            <div class="role-cards">
+            <div class="roles-grid">
                 {{#each HR.roles}}
                 <div class="role-card">
                     <div class="role-header">
-                        <h3 class="role-title">{{title}}</h3>
-                        {{#if count}}
-                        <span class="role-count">Count: {{count}}</span>
-                        {{/if}}
+                        <div class="role-title">{{title}} ({{count}})</div>
+                        <div class="role-salary">{{expected_salary}}</div>
                     </div>
                     <div class="role-details">
-                        {{#if experience_required_in_years}}
-                        <div class="role-detail">
-                            <span class="role-detail-label">Experience:</span>
-                            <span class="role-detail-value">{{experience_required_in_years}} years</span>
-                        </div>
-                        {{/if}}
-                        {{#if expected_salary}}
-                        <div class="role-detail">
-                            <span class="role-detail-label">Salary:</span>
-                            <span class="role-detail-value">{{expected_salary}}</span>
-                        </div>
-                        {{/if}}
-                        {{#if skills_required}}
-                        <div class="role-detail">
-                            <span class="role-detail-label">Skills:</span>
-                            <div class="skills-list">
-                                {{#each skills_required}}
-                                <span>{{this}}</span>
-                                {{/each}}
-                            </div>
-                        </div>
-                        {{/if}}
+                        <div><strong>Experience:</strong> {{experience_required_in_years}} years</div>
+                        <div><strong>Skills:</strong> {{#each skills_required}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</div>
                     </div>
                 </div>
                 {{/each}}
             </div>
-            {{/if}}
-        </div>
+        </section>
+        {{/if}}
 
-        <!-- Deliverables Section -->
+        {{#if software_requirements}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                Software Requirements
+            </h2>
+            <div class="software-grid">
+                {{#each software_requirements}}
+                <div class="software-card">
+                    <div class="software-header">
+                        <div class="software-name">{{name}}</div>
+                        <div class="software-cost">{{estimated_cost}}</div>
+                    </div>
+                    <div class="software-details">
+                        <div><strong>Type:</strong> {{type}}</div>
+                        <div class="license-tag">{{license_type}}</div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </section>
+        {{/if}}
+
+        {{#if licenses_and_services}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Licenses and Services
+            </h2>
+            <div class="software-grid">
+                {{#each licenses_and_services}}
+                <div class="software-card">
+                    <div class="software-header">
+                        <div class="software-name">{{name}}</div>
+                        <div class="software-cost">{{estimated_cost}}</div>
+                    </div>
+                    <div class="software-details">
+                        <div><strong>Purpose:</strong> {{purpose}}</div>
+                        <div class="license-tag">{{license_type}}</div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </section>
+        {{/if}}
+
         {{#if deliverables}}
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <h2 class="section-title">Deliverables</h2>
-            </div>
-            <div class="deliverables-grid">
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Deliverables
+            </h2>
+            <ul class="deliverables-list">
                 {{#each deliverables}}
-                <div class="deliverable-item">
-                    <div class="deliverable-dot"></div>
-                    {{this}}
-                </div>
+                <li>{{this}}</li>
                 {{/each}}
-            </div>
-        </div>
+            </ul>
+        </section>
         {{/if}}
 
-        <!-- Implementation Steps Section -->
         {{#if steps}}
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <h2 class="section-title">Implementation Steps</h2>
-            </div>
-            <div class="steps-container">
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Implementation Steps
+            </h2>
+            <ol class="steps-list">
                 {{#each steps}}
-                <div class="step-item">
-                    <div class="step-header">
-                        <div>
-                            <span class="step-number">Step {{@index}}</span>
-                            {{#if type}}
-                            <span class="step-type {{type}}">{{type}}</span>
-                            {{/if}}
-                        </div>
-                        {{#if estimated_time_in_days}}
-                        <span class="step-time">{{estimated_time_in_days}} days</span>
-                        {{/if}}
-                    </div>
-                    {{#if description}}
-                    <div class="step-description">{{description}}</div>
-                    {{/if}}
-                </div>
+                <li>
+                    <div class="step-type">{{type}}</div>
+                    <div>{{description}}</div>
+                    <div class="step-time">Estimated Time: {{estimated_time_in_days}} days</div>
+                </li>
                 {{/each}}
-            </div>
-        </div>
+            </ol>
+        </section>
         {{/if}}
 
-        <!-- Pricing and Conclusion Section -->
-        {{#if estimated_pricing}}{{#if conclusion}}
-        <div class="section">
-            <div class="pricing-conclusion-grid">
-                {{#if estimated_pricing}}
-                <div class="pricing-box">
-                    <div class="section-header">
-                        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                        </svg>
-                        <h4>Estimated Pricing</h4>
+        {{#if estimated_pricing}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                Pricing and Conclusion
+            </h2>
+            <div class="pricing-section">
+                {{#if estimated_pricing.one_time_cost}}
+                <div class="cost-block">
+                    <h3 class="cost-title">One-Time Costs</h3>
+                    <ul class="cost-breakdown">
+                        {{#each estimated_pricing.one_time_cost.breakdown}}
+                        <li>
+                            <span>{{item}}</span>
+                            <span>{{cost}}</span>
+                        </li>
+                        {{/each}}
+                    </ul>
+                    <div class="cost-total">
+                        <span>Total:</span>
+                        <span>{{estimated_pricing.one_time_cost.total}}</span>
                     </div>
-                    <div class="pricing-amount">{{estimated_pricing}}</div>
                 </div>
                 {{/if}}
-                {{#if conclusion}}
-                <div class="conclusion-box">
-                    <h4>Conclusion</h4>
-                    <div class="conclusion-text">{{conclusion}}</div>
+                {{#if estimated_pricing.monthly_maintenance_cost}}
+                <div class="cost-block">
+                    <h3 class="cost-title">Monthly Maintenance</h3>
+                    <ul class="cost-breakdown">
+                        {{#each estimated_pricing.monthly_maintenance_cost.breakdown}}
+                        <li>
+                            <span>{{item}}</span>
+                            <span>{{cost}}</span>
+                        </li>
+                        {{/each}}
+                    </ul>
+                    <div class="cost-total">
+                        <span>Total:</span>
+                        <span>{{estimated_pricing.monthly_maintenance_cost.total}}</span>
+                    </div>
                 </div>
                 {{/if}}
             </div>
-        </div>
-        {{/if}}{{/if}}
+        </section>
+        {{/if}}
 
-        <!-- Individual Pricing Section -->
-        {{#if estimated_pricing}}{{#unless conclusion}}
-        <div class="section">
-            <div class="section-header">
-                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                </svg>
-                <h2 class="section-title">Project Investment</h2>
+        {{#if payment_schedule}}
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-5-4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM1 18v-2h22v2H1z"/></svg>
+                Payment Schedule
+            </h2>
+            <div class="payment-schedule">
+                <ul class="payment-list">
+                    {{#each payment_schedule}}
+                    <li>
+                        <span class="payment-milestone">{{milestone}}</span>
+                        <span class="payment-amount">{{amount}}</span>
+                    </li>
+                    {{/each}}
+                </ul>
             </div>
-            <div class="pricing-box">
-                <h4>Estimated Project Cost</h4>
-                <div class="pricing-amount">{{estimated_pricing}}</div>
-            </div>
-        </div>
-        {{/unless}}{{/if}}
-
-        <!-- Individual Conclusion Section -->
-        {{#unless estimated_pricing}}{{#if conclusion}}
-        <div class="section">
-            <h2 class="section-title">Conclusion</h2>
-            <div class="conclusion-box">
-                <div class="conclusion-text">{{conclusion}}</div>
-            </div>
-        </div>
-        {{/if}}{{/unless}}
-    </div>
-</body>
-</html>
+        </section>
+        {{/if}}

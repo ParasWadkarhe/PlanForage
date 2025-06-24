@@ -1,7 +1,6 @@
-import { Download, Calendar, Users, Code, Target, CheckCircle, List, DollarSign, FileText } from 'lucide-react';
-import { IoArrowBack } from 'react-icons/io5';
+import { Download, Calendar, Users, Code, Target, CheckCircle, List, DollarSign, FileText, Monitor, Shield, CreditCard, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'
 
 export default function ProjectDisplay({ data, onBackToSearch }) {
     const [isDownloading, setIsDownloading] = useState(false);
@@ -29,6 +28,11 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
             .finally(() => {
                 setIsDownloading(false);
             });
+
+
+        setTimeout(() => {
+            setIsDownloading(false);
+        }, 2000);
     };
 
     const getTypeColor = (type) => {
@@ -55,24 +59,48 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
             cad: 'C$',
             aud: 'A$',
         };
-        return symbols[currency?.toLowerCase()] || '';
+        return symbols[currency?.toLowerCase()] || '$';
     };
 
     const currencySymbol = getCurrencySymbol(data.currency);
+
+    // Helper function to safely render array items
+    const renderArrayItem = (item, index) => {
+        if (typeof item === 'string') {
+            return item;
+        } else if (typeof item === 'object' && item !== null) {
+            // Handle objects with name, description, features
+            if (item.name && item.description) {
+                return (
+                    <div key={index} className="mb-2">
+                        <div className="font-medium">{item.name}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{item.description}</div>
+                        {item.features && Array.isArray(item.features) && (
+                            <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                Features: {item.features.join(', ')}
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+            // Handle other object structures
+            return JSON.stringify(item);
+        }
+        return String(item);
+    };
 
     return (
         <div className="max-w-6xl mx-auto p-6 bg-white dark:bg-gray-900">
             {/* Header with Back Button and Download Button */}
             <div className="flex flex-col gap-6 md:flex-row justify-between items-center mb-8">
-
                 <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">{data.project_title}</h1>
 
-                <div className="w-full md:w-auto justify-between flex md:items-center order-first md:order-none">
+                <div className="w-full md:w-auto flex justify-between md:items-center order-first md:order-none">
                     <button
                         onClick={() => onBackToSearch(null)}
                         className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 mr-4"
                     >
-                        <IoArrowBack className="w-5 h-5 mr-1" />
+                        <ArrowLeft className="w-5 h-5 mr-1" />
                         Back
                     </button>
 
@@ -99,6 +127,38 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                 </div>
             </div>
 
+            {/* Input Summary */}
+            {data.input_summary && (
+                <section className="mb-8">
+                    <div className="flex items-center mb-3">
+                        <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                        <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Project Summary</h2>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            {data.input_summary.query && (
+                                <div>
+                                    <span className="text-gray-600 dark:text-gray-400">Query: </span>
+                                    <span className="text-gray-900 dark:text-gray-100">{data.input_summary.query}</span>
+                                </div>
+                            )}
+                            {data.input_summary.budget && (
+                                <div>
+                                    <span className="text-gray-600 dark:text-gray-400">Budget: </span>
+                                    <span className="text-gray-900 dark:text-gray-100">{data.input_summary.budget}</span>
+                                </div>
+                            )}
+                            {data.input_summary.location && (
+                                <div>
+                                    <span className="text-gray-600 dark:text-gray-400">Location: </span>
+                                    <span className="text-gray-900 dark:text-gray-100">{data.input_summary.location}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* Objective */}
             {data.objective && (
                 <section className="mb-8">
@@ -120,7 +180,7 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {data.modules.map((module, index) => (
                             <div key={index} className="bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded text-sm text-gray-700 dark:text-gray-300">
-                                {module}
+                                {renderArrayItem(module, index)}
                             </div>
                         ))}
                     </div>
@@ -142,7 +202,7 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                                     <div className="space-y-1">
                                         {technologies.map((tech, index) => (
                                             <div key={index} className="text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">
-                                                {tech}
+                                                {renderArrayItem(tech, index)}
                                             </div>
                                         ))}
                                     </div>
@@ -168,7 +228,7 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                                     <div className="space-y-1">
                                         {tasks.map((task, index) => (
                                             <div key={index} className="text-sm text-gray-600 dark:text-gray-400">
-                                                • {task}
+                                                • {renderArrayItem(task, index)}
                                             </div>
                                         ))}
                                     </div>
@@ -235,6 +295,78 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                 </section>
             )}
 
+            {/* Software Requirements */}
+            {data.software_requirements && data.software_requirements.length > 0 && (
+                <section className="mb-8">
+                    <div className="flex items-center mb-4">
+                        <Monitor className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                        <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Software Requirements</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {data.software_requirements.map((software, index) => (
+                            <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-medium text-gray-900 dark:text-gray-100">{software.name}</h3>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${software.commercial_use_allowed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {software.commercial_use_allowed ? 'Commercial OK' : 'Non-Commercial'}
+                                    </span>
+                                </div>
+                                <div className="space-y-1 text-sm">
+                                    <div>
+                                        <span className="text-gray-600 dark:text-gray-400">Type: </span>
+                                        <span className="text-gray-900 dark:text-gray-100">{software.type}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600 dark:text-gray-400">License: </span>
+                                        <span className="text-gray-900 dark:text-gray-100">{software.license_type}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600 dark:text-gray-400">Cost: </span>
+                                        <span className="text-gray-900 dark:text-gray-100">{currencySymbol}{software.estimated_cost}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {/* Licenses and Services */}
+            {data.licenses_and_services && data.licenses_and_services.length > 0 && (
+                <section className="mb-8">
+                    <div className="flex items-center mb-4">
+                        <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                        <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Licenses & Services</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {data.licenses_and_services.map((service, index) => (
+                            <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-medium text-gray-900 dark:text-gray-100">{service.name}</h3>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${service.commercial_use_allowed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {service.commercial_use_allowed ? 'Commercial OK' : 'Non-Commercial'}
+                                    </span>
+                                </div>
+                                <div className="space-y-1 text-sm">
+                                    <div>
+                                        <span className="text-gray-600 dark:text-gray-400">Purpose: </span>
+                                        <span className="text-gray-900 dark:text-gray-100">{service.purpose}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600 dark:text-gray-400">License: </span>
+                                        <span className="text-gray-900 dark:text-gray-100">{service.license_type}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600 dark:text-gray-400">Cost: </span>
+                                        <span className="text-gray-900 dark:text-gray-100">{currencySymbol}{service.estimated_cost}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
             {/* Deliverables */}
             {data.deliverables && data.deliverables.length > 0 && (
                 <section className="mb-8">
@@ -246,7 +378,7 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                         {data.deliverables.map((deliverable, index) => (
                             <div key={index} className="flex items-center text-gray-700 dark:text-gray-300">
                                 <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full mr-3"></div>
-                                {deliverable}
+                                {renderArrayItem(deliverable, index)}
                             </div>
                         ))}
                     </div>
@@ -285,26 +417,104 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                 </section>
             )}
 
-            {/* Pricing and Conclusion */}
-            {(data.estimated_pricing || data.conclusion) && (
+            {/* Enhanced Pricing Section */}
+            {data.estimated_pricing && (
                 <section className="mb-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {data.estimated_pricing && (
-                            <div>
-                                <div className="flex items-center mb-3">
-                                    <DollarSign className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                                    <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Estimated Pricing</h2>
+                    <div className="flex items-center mb-4">
+                        <DollarSign className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                        <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Estimated Pricing</h2>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* One-time Costs */}
+                        {data.estimated_pricing.one_time_cost && (
+                            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 flex flex-col">
+                                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">One-time Costs</h3>
+                                <div className="space-y-3 flex-grow sm:mb-4">
+                                    {data.estimated_pricing.one_time_cost.breakdown && data.estimated_pricing.one_time_cost.breakdown.map((item, index) => (
+                                        <div key={index} className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-600 dark:text-gray-400">{item.item}</span>
+                                            <span className="text-gray-900 dark:text-gray-100 font-medium">{currencySymbol}{item.cost}</span>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div className="text-2xl font-semibold text-blue-600 dark:text-blue-400">{currencySymbol}{data.estimated_pricing}</div>
+                                <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3 lg:mt-auto lg:pt-4">
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">Total</span>
+                                        <span className="text-xl font-semibold text-blue-600 dark:text-blue-400">
+                                            {currencySymbol}{data.estimated_pricing.one_time_cost.total}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         )}
-                        {data.conclusion && (
-                            <div>
-                                <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-3">Conclusion</h2>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{data.conclusion}</p>
+
+                        {/* Monthly Maintenance Costs */}
+                        {data.estimated_pricing.monthly_maintenance_cost && (
+                            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 flex flex-col">
+                                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Monthly Maintenance</h3>
+                                <div className="space-y-3 flex-grow sm:mb-4">
+                                    {data.estimated_pricing.monthly_maintenance_cost.breakdown && data.estimated_pricing.monthly_maintenance_cost.breakdown.map((item, index) => (
+                                        <div key={index} className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-600 dark:text-gray-400">{item.item}</span>
+                                            <span className="text-gray-900 dark:text-gray-100 font-medium">{currencySymbol}{item.cost}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3 lg:mt-auto lg:pt-4">
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">Total/Month</span>
+                                        <span className="text-xl font-semibold text-green-600 dark:text-green-400">
+                                            {currencySymbol}{data.estimated_pricing.monthly_maintenance_cost.total}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
+                </section>
+            )}
+
+            {/* Payment Schedule */}
+            {data.payment_schedule && data.payment_schedule.length > 0 && (
+                <section className="mb-8">
+                    <div className="flex items-center mb-4">
+                        <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                        <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Payment Schedule</h2>
+                    </div>
+                    <div className="space-y-4">
+                        {data.payment_schedule.map((payment, index) => (
+                            <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Milestone {index + 1}</span>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{payment.milestone}</p>
+                                    </div>
+                                    <span className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+                                        {currencySymbol}{payment.amount}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {/* Legacy Pricing Display (for backward compatibility) */}
+            {(data.estimated_pricing && typeof data.estimated_pricing === 'string') && (
+                <section className="mb-8">
+                    <div className="flex items-center mb-3">
+                        <DollarSign className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                        <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Estimated Pricing</h2>
+                    </div>
+                    <div className="text-2xl font-semibold text-blue-600 dark:text-blue-400">{currencySymbol}{data.estimated_pricing}</div>
+                </section>
+            )}
+
+            {/* Conclusion */}
+            {data.conclusion && (
+                <section className="mb-8">
+                    <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-3">Conclusion</h2>
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{data.conclusion}</p>
                 </section>
             )}
         </div>

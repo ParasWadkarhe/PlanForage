@@ -8,21 +8,11 @@ import { use } from 'react';
 export default function SearchPage({ searchHandler }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [location, setLocation] = useState('Anywhere');
-    const [currency, setCurrency] = useState('usd');
+    const [budget, setBudget] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [searchHistory, setSearchHistory] = useState([])
     const searchHistoryId = useRef(null);
     const { userInfo } = useContext(AuthContext)
-
-    const currencies = [
-        { value: 'usd', label: 'USD ($)', symbol: '$' },
-        { value: 'inr', label: 'INR (₹)', symbol: '₹' },
-        { value: 'eur', label: 'EUR (€)', symbol: '€' },
-        { value: 'gbp', label: 'GBP (£)', symbol: '£' },
-        { value: 'jpy', label: 'JPY (¥)', symbol: '¥' },
-        { value: 'cad', label: 'CAD (C$)', symbol: 'C$' },
-        { value: 'aud', label: 'AUD (A$)', symbol: 'A$' },
-    ];
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -32,7 +22,7 @@ export default function SearchPage({ searchHandler }) {
                 const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/query', {
                     query: searchQuery,
                     location: location,
-                    currency: currency,
+                    budget: budget,
                     uid: userInfo?.sub,
                     _id: searchHistoryId.current || null
                 });
@@ -54,8 +44,8 @@ export default function SearchPage({ searchHandler }) {
         setLocation(e.target.value);
     };
 
-    const handleCurrencyChange = (e) => {
-        setCurrency(e.target.value);
+    const handleBudgetChange = (e) => {
+        setBudget(e.target.value);
     };
 
     const handleDeleteHistory = async (itemId) => {
@@ -139,7 +129,7 @@ return (
                </p>
            </div>
 
-           {/* Location and Currency Inputs */}
+           {/* Location and Budget Inputs */}
            <div className="mb-6">
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
                    {/* Location Input */}
@@ -156,22 +146,18 @@ return (
                        />
                    </div>
 
-                   {/* Currency Selector */}
+                   {/* Budget Input */}
                    <div className="relative">
                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                            <DollarSign className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                        </div>
-                       <select
-                           value={currency}
-                           onChange={handleCurrencyChange}
-                           className="block w-full pl-10 pr-8 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none"
-                       >
-                           {currencies.map((curr) => (
-                               <option key={curr.value} value={curr.value}>
-                                   {curr.label}
-                               </option>
-                           ))}
-                       </select>
+                       <input
+                           type="number"
+                           value={budget}
+                           onChange={handleBudgetChange}
+                           placeholder="Budget (USD)"
+                           className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                       />
                    </div>
                </div>
            </div>
