@@ -8,7 +8,6 @@ const generatePrompt = require('../templates/prompt.js')
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
-// add links to hire developers, designers, etc. in the respective roles
 async function query(req, res) {
 
     // if _id is present then fetch the proposal from the database else return a test response

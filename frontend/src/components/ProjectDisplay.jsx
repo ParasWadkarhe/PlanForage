@@ -145,7 +145,7 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
                             {data.input_summary.budget && (
                                 <div>
                                     <span className="text-gray-600 dark:text-gray-400">Budget: </span>
-                                    <span className="text-gray-900 dark:text-gray-100">{data.input_summary.budget}</span>
+                                    <span className="text-gray-900 dark:text-gray-100">${data.input_summary.budget}</span>
                                 </div>
                             )}
                             {data.input_summary.location && (

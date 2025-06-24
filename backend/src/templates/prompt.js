@@ -26,21 +26,21 @@ module.exports = (query, location, budget) => {
     {
       "input_summary": {
         "query": "${query}",
-        "budget": "$${budget}",
+        "budget": "${budget}",
         "location": "${location || 'Anywhere'}"
       },
       "project_title": "",
       "objective": "",
-      "modules": [],
+      "modules": ["", "", ...],
       "technology_stack": {
         // Example keys:
-        "frontend": [],
-        "backend": [],
+        "frontend": ["", "", ....],
+        "backend": ["", "", ....],
         ...Include relevant and (as many as required) sections based on project needs
       },
       "timeline": {
-        "week_1": [],
-        "week_2": [],
+        "week_1": ["", "", ....],
+        "week_2": ["", "", ....],
         ... (Add as many weeks as necessary)
         // Divide tasks week-by-week realistically based on complexity.
       },
@@ -49,7 +49,7 @@ module.exports = (query, location, budget) => {
         "roles": [
           {
             "title": "",
-            "skills_required": [],
+            "skills_required": ["", "", ....],
             "experience_required_in_years": 0,
             "count": 0,
             "expected_salary": "" // Salary in USD
@@ -74,7 +74,7 @@ module.exports = (query, location, budget) => {
           "commercial_use_allowed": true // Must be true for all entries
         }
       ],
-      "deliverables": [],
+      "deliverables": ["", "", ....],
       "steps": [
         {
           "type": "", // e.g., "frontend", "backend", "database", etc.

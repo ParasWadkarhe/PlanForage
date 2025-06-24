@@ -79,7 +79,7 @@ const ProjectProposalSchema = new Schema({
   project_title: String,
   objective: String,
   modules: [String],
-  technology_stack: Mixed, // flexible structure
+  technology_stack: Mixed, 
   timeline: TimelineSchema,
   HR: HRSchema,
   software_requirements: [SoftwareRequirementSchema],
