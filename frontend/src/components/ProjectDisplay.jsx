@@ -25,9 +25,6 @@ export default function ProjectDisplay({ data, onBackToSearch }) {
             .catch((error) => {
                 console.error('PDF download failed:', error);
             })
-            .finally(() => {
-                setIsDownloading(false);
-            });
 
 
         setTimeout(() => {
