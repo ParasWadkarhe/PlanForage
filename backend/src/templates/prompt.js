@@ -4,7 +4,7 @@ module.exports = (query, location, budget) => {
     Based on a short client input describing their requirements, analyze the request carefully and return a fully structured, comprehensive project proposal in strict JSON format as defined below.
     
     First of all you will check if the input provided i.e ${query, location, budget} is valid or not. Use following guidelines
-    - If the input is not proper (unclear search_string, lack of budget, unknown location, gibberish values) and project could not be compleated respond with { "error": true, "message": why not possible in short}. Exception: If no budget is given in the input, provide output without any restrictions on budget.
+    - If the input is not proper (unclear search_string, lack of budget, unknown location, gibberish values) and project could not be compleated respond with { "error": true, "message": why not possible in short}.
     - You will proceed forward if and only if the input is valid else terminate after giving the above output.
 
     All pricing and time estimates must be realistic, aligned with current market standards in ${location || 'Anywhere'}, but **all pricing must be presented in pure numbers without comas (e.g., 2000, 15500)**, regardless of the location.  
