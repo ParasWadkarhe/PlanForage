@@ -10,17 +10,21 @@ const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
 async function query(req, res) {
 
-    // if _id is present then fetch the proposal from the database else return a test response
+    // if _id is present then fetch the proposal from the database else return a new ai-generated response
     if (req.body._id) {
         const proposal = await ProjectProposalModel.findById(req.body._id);
 
-        if (proposal && proposal.search_string === req.body.query) {
+        if (proposal && 
+            proposal.search_string === req.body.search_string &&
+            proposal.location === req.body.location &&
+            proposal.budget === req.body.budget
+        ) {
             const cleanedProposal = removeAllIds(proposal.toObject());
             return res.status(200).json(cleanedProposal);
         }
     }
 
-    const prompt = generatePrompt(req.body.query, req.body.location, req.body.budget)
+    const prompt = generatePrompt(req.body.search_string, req.body.location, req.body.budget)
 
     try {
         const response = await ai.models.generateContent({
@@ -37,9 +41,7 @@ async function query(req, res) {
             if(parsedJSON && !parsedJSON.error) {
                 const proposal = new ProjectProposalModel({
                     uid: uid, 
-                    search_string: req.body.query,
-                    budget: req.body.budget,
-                    location: req.body.location,
+                    ...req.body,
                     ...parsedJSON,
                 });
                 await proposal.save();

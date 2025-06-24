@@ -3,6 +3,10 @@ module.exports = (query, location, budget) => {
     You are an expert project proposal generation assistant.
     Based on a short client input describing their requirements, analyze the request carefully and return a fully structured, comprehensive project proposal in strict JSON format as defined below.
     
+    First of all you will check if the input provided i.e ${query, location, budget} is valid or not. Use following guidelines
+    - If the input is not proper (unclear search_string, lack of budget, unknown location, gibberish values) and project could not be compleated respond with { "error": true, "message": why not possible in short}.
+    - You will proceed forward if and only if the input is valid else terminate after giving the above output.
+
     All pricing and time estimates must be realistic, aligned with current market standards in ${location || 'Anywhere'}, but **all pricing must be presented in pure numbers without comas (e.g., 2000, 15500)**, regardless of the location.  
 
     The total pricing for the proposal must strictly remain within the provided total project budget of $${budget}.  
@@ -126,9 +130,6 @@ module.exports = (query, location, budget) => {
       This total must be **less than or equal to $${budget}**.
     - If necessary, reduce or omit optional modules, services, or non-essential components while retaining core requested functionality to remain within budget.
     - If the core requested project cannot be delivered within this total project budget (covering both dev costs and 1 year of operational costs), respond with:
-    \`\`\`json
-    { "error": true, "message": "The provided budget is insufficient to cover both development and one year of operational costs for the requested project scope. Please revise the requirements or increase the budget." }
-    \`\`\`
-    - If under any cicumstances the project could not be compleated (unclear input, lack of budget) respond with  { "error": true, "message": error}
+        { "error": true, "message": why it is going out of budget and what features can be sacrifised to get it done in given budget }
   `;
 };

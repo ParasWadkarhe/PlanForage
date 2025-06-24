@@ -70,8 +70,8 @@ export default function Navbar() {
                         ) : (
                             <User
                                 onClick={toggleProfileMenu}
-                                className="w-8 h-8 text-gray-600 dark:text-gray-300 cursor-pointer border-[1.5px] rounded-full"
-                                strokeWidth={1.5}
+                                className="w-8 h-8 p-1 text-gray-600 dark:text-gray-300 cursor-pointer border-[1.2px] rounded-full"
+                                strokeWidth={1.2}
                             />
                         )}
 

@@ -1,30 +1,31 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect,  useContext } from 'react';
 import { Search, ArrowRight, MapPin, DollarSign, Loader2, X } from 'lucide-react';
 import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from 'react-router-dom';
-import { use } from 'react';
 
 export default function SearchPage({ searchHandler }) {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [location, setLocation] = useState('Anywhere');
-    const [budget, setBudget] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [searchHistory, setSearchHistory] = useState([])
-    const searchHistoryId = useRef(null);
+    const [searchData, setSearchData] = useState({search_string: '', location: '', budget: ''})
     const { userInfo } = useContext(AuthContext)
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if (searchQuery.trim() && !isLoading) {
+
+        if(!searchData) {
+            console.error('Problem searching. Search Data is null')
+            return
+        }
+        
+        if (searchData.search_string.trim() && !isLoading) {
             setIsLoading(true);
             try {
                 const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/query', {
-                    query: searchQuery,
-                    location: location,
-                    budget: budget,
+                    search_string: searchData?.search_string,
+                    location: searchData?.location,
+                    budget: searchData?.budget,
                     uid: userInfo?.sub,
-                    _id: searchHistoryId.current || null
+                    _id: searchData?._id || null
                 });
                 searchHandler(response.data);
             } catch (error) {
@@ -36,16 +37,15 @@ export default function SearchPage({ searchHandler }) {
         }
     };
 
-    const handleInputChange = (e) => {
-        setSearchQuery(e.target.value);
-    };
-
-    const handleLocationChange = (e) => {
-        setLocation(e.target.value);
-    };
-
-    const handleBudgetChange = (e) => {
-        setBudget(e.target.value);
+    const handleSearchDataChange = (e) => {
+        setSearchData(prev => {
+            const temp = { 
+                ...prev,
+                [e.target.name]: e.target.value
+            }
+            delete temp._id
+            return temp
+        })
     };
 
     const handleDeleteHistory = async (itemId) => {
@@ -62,6 +62,7 @@ export default function SearchPage({ searchHandler }) {
         }
     };
 
+    // show search history
     useEffect(() => {
         if(!userInfo) return;
 
@@ -77,7 +78,6 @@ export default function SearchPage({ searchHandler }) {
 
         }
     }, [userInfo]);
-
 
     // Loading Screen Component
     if (isLoading) {
@@ -111,7 +111,7 @@ return (
        <div className="max-w-2xl mx-auto text-center">
            {/* Brand Name */}
            <div className="mb-8">
-               <h1 className="text-4xl sm:text-5xl font-semibold text-blue-600 dark:text-blue-400 mb-4">
+               <h1 className="text-4xl sm:text-5xl font-semibold text-blue-600 dark:text-blue-400 my-6">
                    PlanForage
                </h1>
                <div className="w-16 h-0.5 bg-blue-600 dark:bg-blue-400 mx-auto"></div>
@@ -139,8 +139,9 @@ return (
                        </div>
                        <input
                            type="text"
-                           value={location}
-                           onChange={handleLocationChange}
+                           name='location'
+                           value={searchData.location}
+                           onChange={handleSearchDataChange}
                            placeholder="Location"
                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                        />
@@ -153,8 +154,9 @@ return (
                        </div>
                        <input
                            type="number"
-                           value={budget}
-                           onChange={handleBudgetChange}
+                           name='budget'
+                           value={searchData.budget || ''}
+                           onChange={handleSearchDataChange}
                            placeholder="Budget (USD)"
                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                        />
@@ -171,8 +173,9 @@ return (
                        </div>
                        <input
                            type="text"
-                           value={searchQuery}
-                           onChange={handleInputChange}
+                           name='search_string'
+                           value={searchData.search_string}
+                           onChange={handleSearchDataChange}
                            onKeyPress={(e) => e.key === 'Enter' && handleSearch(e)}
                            placeholder="Describe your project idea..."
                            className="block w-full pl-12 pr-12 py-4 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -180,12 +183,12 @@ return (
                        <button
                            onClick={handleSearch}
                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                           disabled={!searchQuery.trim() || isLoading}
+                           disabled={!searchData.search_string.trim() || isLoading}
                        >
                            {isLoading ? (
                                <Loader2 className="h-5 w-5 animate-spin" />
                            ) : (
-                               <ArrowRight className={`h-5 w-5 ${!searchQuery.trim() ? 'opacity-50' : ''}`} />
+                               <ArrowRight className={`h-5 w-5 ${!searchData.search_string.trim() ? 'opacity-50' : ''}`} />
                            )}
                        </button>
                    </div>
@@ -201,8 +204,9 @@ return (
                            <div key={item._id} className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-full transition-colors duration-200">
                                <button
                                    onClick={() => {
-                                       setSearchQuery(item.search_string)
-                                       searchHistoryId.current = item._id;
+                                       setSearchData(() => {
+                                        return { ...item }
+                                       })
                                    }}
                                    className="px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200"
                                >
@@ -232,7 +236,12 @@ return (
                    ].map((example, index) => (
                        <button
                            key={index}
-                           onClick={() => setSearchQuery(example)}
+                           onClick={() => setSearchData(prev => {
+                            return {
+                                ...prev,
+                                search_string: example,
+                            }
+                           })}
                            className="px-3 py-1 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                            disabled={isLoading}
                        >

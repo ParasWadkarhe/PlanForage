@@ -91,15 +91,4 @@ const ProjectProposalSchema = new Schema({
   conclusion: String
 });
 
-// Find all past searches (only search strings) of a user by uid
-ProjectProposalSchema.statics.findByUid = async function (uid) {
-  try {
-    const proposals = await this.find({ uid }).select('search_string');
-    return { error: false, proposals };
-  } catch (error) {
-    console.error(error);
-    return { error: true, message: "Error fetching proposals", proposals: [] };
-  }
-};
-
 module.exports = mongoose.model("ProjectProposal", ProjectProposalSchema);

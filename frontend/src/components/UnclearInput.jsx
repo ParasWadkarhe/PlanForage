@@ -15,7 +15,7 @@ export default function UnclearInput({ data, onBackToSearch, originalQuery = '' 
                     </div>
                 </div>
                 <h2 className="text-xl sm:text-2xl text-gray-900 dark:text-gray-100 font-medium mb-4">
-                    Could you be more specific?
+                    Could not generate project proposal
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl mx-auto mb-2">
                     {data.message || "We couldn't generate a clear project plan from your input. Please provide more details about what you'd like to build, including the type of project, key features, or target audience."}
