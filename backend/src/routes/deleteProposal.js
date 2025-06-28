@@ -1,7 +1,4 @@
-
 const ProjectProposalModel = require("../models/ProjectProposal.js");
-
-
 
 const deleteProposal =  async (req, res) => {
   const id = req.params.id;

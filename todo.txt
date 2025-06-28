@@ -4,5 +4,10 @@ DONE:
 
 TODO:
 // add links to hire developers, designers, etc. in the respective roles
+// dashboard -> search and filter proposals, search & user button in left sidebar
+// search history
 
 https://plan-forage.vercel.app/
+
+
+

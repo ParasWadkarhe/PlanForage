@@ -5,7 +5,6 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function SearchPage({ searchHandler }) {
     const [isLoading, setIsLoading] = useState(false);
-    const [searchHistory, setSearchHistory] = useState([])
     const [searchData, setSearchData] = useState({search_string: '', location: '', budget: ''})
     const { userInfo } = useContext(AuthContext)
 
@@ -48,36 +47,6 @@ export default function SearchPage({ searchHandler }) {
         })
     };
 
-    const handleDeleteHistory = async (itemId) => {
-        try {
-            setSearchHistory(prevHistory => prevHistory.filter(item => item._id !== itemId));
-
-            axios.delete(import.meta.env.VITE_BACKEND_URL + '/delete-proposal/' + itemId)
-                .then()
-                .catch(error => {
-                    console.error('Error deleting search history:', error);
-                });
-        } catch (error) {
-            console.error('Error deleting search history:', error);
-        }
-    };
-
-    // show search history
-    useEffect(() => {
-        if(!userInfo) return;
-
-        axios.get(import.meta.env.VITE_BACKEND_URL + '/search-history/' + userInfo?.sub)
-            .then(response => {
-                setSearchHistory(response.data.proposals || []);
-            })
-            .catch(error => {
-                console.error('Error fetching search history:', error);
-            });
-
-        return () => {
-
-        }
-    }, [userInfo]);
 
     // Loading Screen Component
     if (isLoading) {
@@ -195,61 +164,7 @@ return (
                </div>
            </div>
 
-           {/* Search History */}
-           {searchHistory.length > 0 && (
-               <div className="mb-8 max-w-lg mx-auto">
-                   <h3 className="text-sm text-gray-500 dark:text-gray-400 mb-4">Your Previous Searches:</h3>
-                   <div className="flex flex-wrap gap-2">
-                       {searchHistory.map((item) => (
-                           <div key={item._id} className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-full transition-colors duration-200">
-                               <button
-                                   onClick={() => {
-                                       setSearchData(() => {
-                                        return { ...item }
-                                       })
-                                   }}
-                                   className="px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200"
-                               >
-                                   {item.search_string}
-                               </button>
-                               <button
-                                   onClick={() => handleDeleteHistory(item._id)}
-                                   className="p-1 text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors duration-200"
-                               >
-                                   <X className="h-3 w-3" />
-                               </button>
-                           </div>
-                       ))}
-                   </div>
-               </div>
-           )}
-
-           {/* Quick Examples */}
-           {searchHistory.length <= 0 && <div className="text-center">
-               <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Try searching for:</p>
-               <div className="flex flex-wrap justify-center gap-2">
-                   {[
-                       'Mobile app for video conferencing',
-                       'Analytics dashboard for E-commerce website',
-                       'AI chatbot for document summary',
-                       'Project management tool with AI task prioritization'
-                   ].map((example, index) => (
-                       <button
-                           key={index}
-                           onClick={() => setSearchData(prev => {
-                            return {
-                                ...prev,
-                                search_string: example,
-                            }
-                           })}
-                           className="px-3 py-1 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                           disabled={isLoading}
-                       >
-                           {example}
-                       </button>
-                   ))}
-               </div>
-           </div>}
+           
        </div>
    </div>
 );

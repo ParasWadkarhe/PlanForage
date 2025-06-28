@@ -10,6 +10,7 @@ const getSearchHistory = require('./routes/searchHistory.js');
 const proposalFromId = require('./routes/proposalFromId.js')
 const downloadPdf = require('./routes/downloadPdf.js');
 const deleteProposal = require('./routes/deleteProposal.js');
+const userDashboard = require('./routes/userDashboard.js');
 
 // config
 const app = express();
@@ -41,6 +42,7 @@ app.get('/search-history/:uid', getSearchHistory)
 app.get('/fetch-proposal/:id', proposalFromId)
 app.post('/download-pdf', downloadPdf)
 app.delete('/delete-proposal/:id', deleteProposal)
+app.get('/user-dashboard/:uid', userDashboard)
 
 // app
 app.listen(PORT, () => {

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { GoogleGenAI } = require("@google/genai")
 const ProjectProposalModel = require("../models/ProjectProposal.js");
+const UserDashboard = require('../models/UserDashboard.js')
 
 // utility imports
 const removeAllIds = require("./utils/removeAllIds.js");
@@ -9,6 +10,16 @@ const generatePrompt = require('../templates/prompt.js')
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
 async function query(req, res) {
+
+    // update search count even if it fails
+    UserDashboard.updateOne(
+        { uid: req.body.uid }, 
+        {
+            $inc: {
+                searchCount: 1,
+            }
+        }
+    )
 
     // if _id is present then fetch the proposal from the database else return a new ai-generated response
     if (req.body._id) {
@@ -45,6 +56,19 @@ async function query(req, res) {
                     ...parsedJSON,
                 });
                 await proposal.save();
+
+                 UserDashboard.updateOne(
+                    { uid: uid }, 
+                    {
+                        $inc: {
+                            plansCreated: 1,
+                        }
+                    }
+                , {
+                    upsert: true
+                }).catch(err => {
+                    console.error("Error updating user dashboard:", err);
+                })
             }
 
             res.status(200).json(parsedJSON);

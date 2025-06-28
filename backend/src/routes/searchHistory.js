@@ -10,7 +10,8 @@ async function getSearchHistory(req, res) {
     const proposals = await ProjectProposalModel.find({ uid }).select([
       "search_string",
       "budget",
-      "location"
+      "location",
+      "date"
     ]);
 
     return res.status(200).json({ proposals });

@@ -1,154 +1,248 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Zap, Brain, Clock, Target } from 'lucide-react';
+import { Zap, Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 
 function LoginButton() {
     const navigate = useNavigate();
-    const { userLogIn } = useContext(AuthContext)
-    const [isDarkMode, setIsDarkMode] = useState(false)
+    const { userLogIn } = useContext(AuthContext);
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isSignup, setIsSignup] = useState(true); 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
-    const onSuccess = (credentialResponse) => {
+    const onGoogleSuccess = (credentialResponse) => {
         const userInfo = jwtDecode(credentialResponse.credential);
         userLogIn(userInfo);
-        navigate("/");
+        navigate("/home");
     };
 
-    const onError = () => {
-        alert("Login Failed. Please try again.");
+    const onGoogleError = () => {
+        alert("Google Login Failed. Please try again.");
     };
 
-    const features = [
-        {
-            icon: <Brain className="w-5 h-5" />,
-            title: "AI-Powered Planning",
-            description: "Smart project roadmaps generated instantly"
-        },
-        {
-            icon: <Target className="w-5 h-5" />,
-            title: "Resource Management",
-            description: "Optimize team allocation and budgets"
-        },
-        {
-            icon: <Clock className="w-5 h-5" />,
-            title: "Timeline Optimization",
-            description: "Realistic schedules that actually work"
+    const handleInputChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleEmailSubmit = (e) => {
+        e.preventDefault();
+        if (isSignup) {
+            if (formData.password !== formData.confirmPassword) {
+                alert("Passwords don't match!");
+                return;
+            }
+            // Handle signup logic here
+            console.log('Signup with:', formData);
+            alert('Signup functionality would be implemented here');
+        } else {
+            // Handle login logic here
+            console.log('Login with:', { email: formData.email, password: formData.password });
+            alert('Login functionality would be implemented here');
         }
-    ];
+    };
+
+    const handleBackToHome = () => {
+        // navigate('/');
+        alert('Navigation to home would happen here');
+    };
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
-            setIsDarkMode(true)
+            setIsDarkMode(true);
         } else {
-            setIsDarkMode(false)
+            setIsDarkMode(false);
         }
+        
+        // Trigger load animation
+        setTimeout(() => setIsLoaded(true), 100);
     }, []);
 
     return (
-        <div className="min-h-[100svh] bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-900 flex items-center justify-center p-6">
-            <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
-
-                {/* Left Side - Product Description */}
-                <div className="space-y-8 text-center lg:text-left">
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-center lg:justify-start py-4 space-x-2">
-                            <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
-                                <Zap className="w-5 h-5 text-white" />
-                            </div>
-                            <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400">PlanForage</h1>
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-500">
+            {/* Navbar */}
+            <nav className={`w-full bg-white dark:bg-gray-900 backdrop-blur-md sticky top-0 z-50 py-2 transition-all duration-700 ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
+                <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div className="flex items-center gap-3 cursor-pointer group transition-all duration-300 hover:scale-105" onClick={handleBackToHome}>
+                        <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:bg-purple-200 dark:group-hover:bg-purple-800 group-hover:rotate-12">
+                            <Zap className="w-6 h-6 text-purple-600 dark:text-purple-400 transition-all duration-300 group-hover:scale-110" />
                         </div>
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
+                            PlanForage
+                        </h1>
+                    </div>
 
-                        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-                            AI-Powered Project Planning Made Simple
-                        </h2>
-
-                        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-lg mx-auto lg:mx-0">
-                            Transform your ideas into actionable project plans with intelligent resource allocation,
-                            timeline optimization, and cost estimation.
+                    <div className='flex gap-8 items-center'>
+                        <p className={`text-white text-sm transition-all duration-500 delay-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}>  
+                            {isSignup ? 'Already playing with PlanForage?' : "Don't have an account?"}
                         </p>
-                    </div>
-
-                    {/* Key Features */}
-                    <div className="space-y-4">
-                        {features.map((feature, index) => (
-                            <div key={index} className="flex items-start space-x-4 p-4 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40">
-                                <div className="flex-shrink-0 p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg text-blue-600 dark:text-blue-400">
-                                    {feature.icon}
-                                </div>
-                                <div className="text-left">
-                                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                                        {feature.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">
-                                        {feature.description}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Trust Indicators */}
-                    <div className="flex items-center justify-center lg:justify-start space-x-6 text-sm text-gray-500 dark:text-gray-400">
-                        <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span>Instant Setup</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                            <span>AI-Driven</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                            <span>Enterprise Ready</span>
-                        </div>
+                        
+                        <button
+                            onClick={() => setIsSignup(prev => !prev)}
+                            className={`bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg hover:shadow-purple-500/25 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                            style={{ transitionDelay: '400ms' }}
+                        >
+                            Login
+                        </button>
                     </div>
                 </div>
+            </nav>
 
-                {/* Right Side - Login Card */}
-                <div className="flex justify-center lg:justify-end">
-                    <div className="w-full max-w-md">
-                        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
-                            <div className="text-center mb-8">
-                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                                    Get Started
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-300">
-                                    Sign in to create your first AI-powered project plan
-                                </p>
+            <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[calc(100vh-80px)]">
+                <div className="w-full max-w-md">
+                    <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-800 p-8 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-2 ${isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}
+                         style={{ transitionDelay: '200ms' }}>
+                        
+                        <div className={`text-center mb-8 transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                             style={{ transitionDelay: '400ms' }}>
+                            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+                                {isSignup ? 'Create Account' : 'Welcome Back'}
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                                {isSignup
+                                    ? 'Sign up to start creating AI-powered project plans'
+                                    : 'Sign in to access your AI-powered project planner'
+                                }
+                            </p>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* Email/Password Form */}
+                            <form onSubmit={handleEmailSubmit} className="space-y-4">
+                                {isSignup && (
+                                    <div className={`relative transition-all duration-500 ${isSignup ? 'opacity-100 max-h-20 translate-y-0' : 'opacity-0 max-h-0 -translate-y-4'}`}>
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-200">
+                                            <User className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            placeholder="Full Name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 focus:scale-105 hover:shadow-md"
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-all duration-200 group-focus-within:text-purple-500">
+                                        <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-purple-500 transition-colors duration-200" />
+                                    </div>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email Address"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        required
+                                        className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 focus:scale-105 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-600"
+                                    />
+                                </div>
+
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-all duration-200 group-focus-within:text-purple-500">
+                                        <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-purple-500 transition-colors duration-200" />
+                                    </div>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="Password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        required
+                                        className="w-full pl-10 pr-12 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 focus:scale-105 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-600"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-all duration-200 hover:scale-110 active:scale-95"
+                                    >
+                                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                    </button>
+                                </div>
+
+                                {isSignup && (
+                                    <div className={`relative group transition-all duration-500 ${isSignup ? 'opacity-100 max-h-20 translate-y-0' : 'opacity-0 max-h-0 -translate-y-4'}`}>
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-all duration-200 group-focus-within:text-purple-500">
+                                            <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-purple-500 transition-colors duration-200" />
+                                        </div>
+                                        <input
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            name="confirmPassword"
+                                            placeholder="Confirm Password"
+                                            value={formData.confirmPassword}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full pl-10 pr-12 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 focus:scale-105 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-600"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-all duration-200 hover:scale-110 active:scale-95"
+                                        >
+                                            {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                        </button>
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/30 flex items-center justify-center gap-2 group"
+                                >
+                                    {isSignup ? 'Create Account' : 'Sign In'}
+                                    <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                </button>
+                            </form>
+
+                            <div className="relative">
+                                <div className="absolute inset-0 flex items-center">
+                                    <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
+                                </div>
+                                <div className="relative flex justify-center text-sm">
+                                    <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                                        Or continue with
+                                    </span>
+                                </div>
                             </div>
 
-                            <div className="space-y-6">
-                                <div className="flex justify-center">
+                            {/* Google Login */}
+                            <div className={`flex justify-center transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                                 style={{ transitionDelay: '600ms' }}>
+                                <div className="transition-all duration-300 hover:scale-105 active:scale-95">
                                     <GoogleLogin
-                                        onSuccess={onSuccess}
-                                        onError={onError}
+                                        onSuccess={onGoogleSuccess}
+                                        onError={onGoogleError}
                                         size="large"
                                         theme={isDarkMode ? 'filled_blue' : 'outline'}
                                     />
                                 </div>
-
-                                <div className="relative">
-                                    <div className="absolute inset-0 flex items-center">
-                                        <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
-                                    </div>
-                                    <div className="relative flex justify-center text-sm">
-                                        <span className="px-4 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Start planning in seconds</span>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
 
-                            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 text-center">
-                                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                                    By signing in, you agree to our{' '}
-                                    <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">Terms</span>
-                                    {' '}and{' '}
-                                    <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">Privacy Policy</span>
-                                </p>
-                            </div>
+                        <div className={`mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 text-center transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                             style={{ transitionDelay: '700ms' }}>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                                By {isSignup ? 'signing up' : 'signing in'}, you agree to our{' '}
+                                <span className="text-purple-600 dark:text-purple-400 hover:underline cursor-pointer transition-all duration-200 hover:text-purple-700 dark:hover:text-purple-300">Terms</span>
+                                {' '}and{' '}
+                                <span className="text-purple-600 dark:text-purple-400 hover:underline cursor-pointer transition-all duration-200 hover:text-purple-700 dark:hover:text-purple-300">Privacy Policy</span>
+                            </p>
                         </div>
                     </div>
                 </div>
