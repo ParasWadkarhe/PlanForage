@@ -3,7 +3,6 @@ const UserDashboardModel = require('../models/UserDashboard.js');
 const userDashboard = async (req, res) => {
     const uid = req.params.uid;
 
-
     if (!uid) {
         return res.status(400).json({ error: "User ID is required" });
     }

@@ -12,13 +12,10 @@ const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 async function query(req, res) {
 
     // update search count even if it fails
-    UserDashboard.updateOne(
+    await UserDashboard.updateOne(
         { uid: req.body.uid }, 
-        {
-            $inc: {
-                searchCount: 1,
-            }
-        }
+        { $inc: { searchCount: 1, } },
+        { upsert: true }  
     )
 
     // if _id is present then fetch the proposal from the database else return a new ai-generated response
@@ -57,18 +54,12 @@ async function query(req, res) {
                 });
                 await proposal.save();
 
-                 UserDashboard.updateOne(
+                await UserDashboard.updateOne(
                     { uid: uid }, 
-                    {
-                        $inc: {
-                            plansCreated: 1,
-                        }
-                    }
-                , {
-                    upsert: true
-                }).catch(err => {
-                    console.error("Error updating user dashboard:", err);
-                })
+                    { $inc: { plansCreated: 1, }},
+                    { upsert: true }  
+                , { upsert: true }
+                )
             }
 
             res.status(200).json(parsedJSON);

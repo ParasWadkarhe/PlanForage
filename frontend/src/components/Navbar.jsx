@@ -2,6 +2,9 @@ import { LogOut, Sun, Moon, User } from 'lucide-react';
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
+
 
 export default function Navbar() {
 
@@ -11,12 +14,13 @@ export default function Navbar() {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [imageError, setImageError] = useState(false);
 
-    const handleLogout = () => {
-        if (window.google?.accounts?.id) {
-            window.google.accounts.id.disableAutoSelect();
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate("/login");
+        } catch (err) {
+            console.error("Logout error:", err.message);
         }
-        userLogOut()
-        navigate("/login");
     };
 
     const toggleProfileMenu = () => {

@@ -6,7 +6,7 @@ import { AppContext } from '../context/AppContext';
 
 export default function ProjectDisplay() {
 
-    const {projectData, setProjectData} = useContext(AppContext);
+    const { projectData, setProjectData } = useContext(AppContext);
 
     const [expandedSections, setExpandedSections] = useState({
         modules: false,
@@ -282,51 +282,51 @@ export default function ProjectDisplay() {
 
                 {/* Pricing */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-purple-100 dark:border-purple-800 p-6 animate-slide-up delay-700">
-    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-        <DollarSign className="w-5 h-5 text-purple-600" />
-        Estimated Pricing
-    </h2>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-lg flex flex-col">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">One-time Costs</h3>
-            <div className="flex-1 flex flex-col justify-between">
-                <div className="space-y-3">
-                    {projectData.estimated_pricing?.one_time_cost?.breakdown?.map((item, index) => (
-                        <div key={index} className="flex justify-between items-center">
-                            <span className="text-gray-700 dark:text-gray-300">{item.item}</span>
-                            <span className="font-medium text-gray-900 dark:text-white">{formatCurrency(item.cost)}</span>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-purple-600" />
+                        Estimated Pricing
+                    </h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-lg flex flex-col">
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">One-time Costs</h3>
+                            <div className="flex-1 flex flex-col justify-between">
+                                <div className="space-y-3">
+                                    {projectData.estimated_pricing?.one_time_cost?.breakdown?.map((item, index) => (
+                                        <div key={index} className="flex justify-between items-center">
+                                            <span className="text-gray-700 dark:text-gray-300">{item.item}</span>
+                                            <span className="font-medium text-gray-900 dark:text-white">{formatCurrency(item.cost)}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
+                                    <div className="flex justify-between items-center font-semibold text-lg">
+                                        <span className="text-gray-900 dark:text-white">Total</span>
+                                        <span className="text-green-600 dark:text-green-400">{formatCurrency(projectData.estimated_pricing?.one_time_cost?.total)}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    ))}
-                </div>
-                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
-                    <div className="flex justify-between items-center font-semibold text-lg">
-                        <span className="text-gray-900 dark:text-white">Total</span>
-                        <span className="text-green-600 dark:text-green-400">{formatCurrency(projectData.estimated_pricing?.one_time_cost?.total)}</span>
+                        <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex flex-col">
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Monthly Maintenance</h3>
+                            <div className="flex-1 flex flex-col justify-between">
+                                <div className="space-y-3">
+                                    {projectData.estimated_pricing?.monthly_maintenance_cost?.breakdown?.map((item, index) => (
+                                        <div key={index} className="flex justify-between items-center">
+                                            <span className="text-gray-700 dark:text-gray-300">{item.item}</span>
+                                            <span className="font-medium text-gray-900 dark:text-white">{formatCurrency(item.cost)}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
+                                    <div className="flex justify-between items-center font-semibold text-lg">
+                                        <span className="text-gray-900 dark:text-white">Total</span>
+                                        <span className="text-blue-600 dark:text-blue-400">{formatCurrency(projectData.estimated_pricing?.monthly_maintenance_cost?.total)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex flex-col">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Monthly Maintenance</h3>
-            <div className="flex-1 flex flex-col justify-between">
-                <div className="space-y-3">
-                    {projectData.estimated_pricing?.monthly_maintenance_cost?.breakdown?.map((item, index) => (
-                        <div key={index} className="flex justify-between items-center">
-                            <span className="text-gray-700 dark:text-gray-300">{item.item}</span>
-                            <span className="font-medium text-gray-900 dark:text-white">{formatCurrency(item.cost)}</span>
-                        </div>
-                    ))}
-                </div>
-                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
-                    <div className="flex justify-between items-center font-semibold text-lg">
-                        <span className="text-gray-900 dark:text-white">Total</span>
-                        <span className="text-blue-600 dark:text-blue-400">{formatCurrency(projectData.estimated_pricing?.monthly_maintenance_cost?.total)}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
                 {/* Payment Schedule */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-purple-100 dark:border-purple-800 p-6 animate-slide-up delay-800">

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Trash2, Loader2, FileText, Search, Filter, X, Calendar, Pencil } from "lucide-react";
 
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../firebase/AuthContext";
 import { AppContext } from "../../context/AppContext";
 
 const HistoryContent = () => {
@@ -13,7 +13,7 @@ const HistoryContent = () => {
     const [dateFilter, setDateFilter] = useState("");
     const [budgetFilter, setBudgetFilter] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
-    const { userInfo } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const {setProjectData, setActiveTab, setSearchData} = useContext(AppContext)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -29,7 +29,7 @@ const HistoryContent = () => {
                 search_string: searchData?.search_string,
                 location: searchData?.location,
                 budget: searchData?.budget,
-                uid: userInfo?.sub,
+                uid: user?.uid,
                 _id: searchData?._id || null
             });
             setProjectData(response.data)
@@ -94,9 +94,9 @@ const HistoryContent = () => {
 
     // show search history
     useEffect(() => {
-        if(!userInfo) return;
+        if(!user) return;
 
-        axios.get(import.meta.env.VITE_BACKEND_URL + '/search-history/' + userInfo?.sub)
+        axios.get(import.meta.env.VITE_BACKEND_URL + '/search-history/' + user?.uid)
             .then(response => {
                 setSearchHistory(response.data.proposals || []);
             })
@@ -107,7 +107,7 @@ const HistoryContent = () => {
         return () => {
 
         }
-    }, [userInfo]);
+    }, [user]);
 
     const formatDate = (dateString) => {
         try {

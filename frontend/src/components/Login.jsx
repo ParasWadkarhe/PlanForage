@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { Zap, Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Zap, Eye, EyeOff, Mail, Lock, User, ArrowRight, Chrome } from 'lucide-react';
+import { FcGoogle } from 'react-icons/fc';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { updateProfile } from 'firebase/auth';
 
 function LoginButton() {
     const navigate = useNavigate();
-    const { userLogIn } = useContext(AuthContext);
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const [isSignup, setIsSignup] = useState(true); 
+    const [isSignup, setIsSignup] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -21,16 +19,6 @@ function LoginButton() {
         confirmPassword: ''
     });
 
-    const onGoogleSuccess = (credentialResponse) => {
-        const userInfo = jwtDecode(credentialResponse.credential);
-        userLogIn(userInfo);
-        navigate("/home");
-    };
-
-    const onGoogleError = () => {
-        alert("Google Login Failed. Please try again.");
-    };
-
     const handleInputChange = (e) => {
         setFormData({
             ...formData,
@@ -38,37 +26,46 @@ function LoginButton() {
         });
     };
 
-    const handleEmailSubmit = (e) => {
+    const handleEmailSubmit = async (e) => {
         e.preventDefault();
+
         if (isSignup) {
             if (formData.password !== formData.confirmPassword) {
                 alert("Passwords don't match!");
                 return;
             }
-            // Handle signup logic here
-            console.log('Signup with:', formData);
-            alert('Signup functionality would be implemented here');
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+                await updateProfile(userCredential.user, {
+                    displayName: formData.name,
+                });
+                alert('Account created successfully');
+                navigate('/home');
+            } catch (err) {
+                alert(err.message);
+            }
         } else {
-            // Handle login logic here
-            console.log('Login with:', { email: formData.email, password: formData.password });
-            alert('Login functionality would be implemented here');
+            try {
+                await signInWithEmailAndPassword(auth, formData.email, formData.password);
+                navigate('/home');
+            } catch (err) {
+                alert(err.message);
+            }
         }
     };
 
-    const handleBackToHome = () => {
-        // navigate('/');
-        alert('Navigation to home would happen here');
+    // Replace onGoogleSuccess function with this:
+    const onGoogleSuccess = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            navigate('/home');
+        } catch (err) {
+            alert('Google login failed');
+        }
     };
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            setIsDarkMode(true);
-        } else {
-            setIsDarkMode(false);
-        }
-        
-        // Trigger load animation
         setTimeout(() => setIsLoaded(true), 100);
     }, []);
 
@@ -77,7 +74,7 @@ function LoginButton() {
             {/* Navbar */}
             <nav className={`w-full bg-white dark:bg-gray-900 backdrop-blur-md sticky top-0 z-50 py-2 transition-all duration-700 ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
                 <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <div className="flex items-center gap-3 cursor-pointer group transition-all duration-300 hover:scale-105" onClick={handleBackToHome}>
+                    <div className="flex items-center gap-3 cursor-pointer group transition-all duration-300 hover:scale-105" onClick={() => alert('Navigation to home would happen here')}>
                         <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:bg-purple-200 dark:group-hover:bg-purple-800 group-hover:rotate-12">
                             <Zap className="w-6 h-6 text-purple-600 dark:text-purple-400 transition-all duration-300 group-hover:scale-110" />
                         </div>
@@ -87,10 +84,10 @@ function LoginButton() {
                     </div>
 
                     <div className='flex gap-8 items-center'>
-                        <p className={`text-white text-sm transition-all duration-500 delay-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}>  
+                        <p className={`text-white text-sm transition-all duration-500 delay-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}>
                             {isSignup ? 'Already playing with PlanForage?' : "Don't have an account?"}
                         </p>
-                        
+
                         <button
                             onClick={() => setIsSignup(prev => !prev)}
                             className={`bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg hover:shadow-purple-500/25 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
@@ -105,10 +102,10 @@ function LoginButton() {
             <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[calc(100vh-80px)]">
                 <div className="w-full max-w-md">
                     <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-800 p-8 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-2 ${isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}
-                         style={{ transitionDelay: '200ms' }}>
-                        
+                        style={{ transitionDelay: '200ms' }}>
+
                         <div className={`text-center mb-8 transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                             style={{ transitionDelay: '400ms' }}>
+                            style={{ transitionDelay: '400ms' }}>
                             <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
                                 {isSignup ? 'Create Account' : 'Welcome Back'}
                             </h3>
@@ -223,20 +220,33 @@ function LoginButton() {
 
                             {/* Google Login */}
                             <div className={`flex justify-center transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                                 style={{ transitionDelay: '600ms' }}>
-                                <div className="transition-all duration-300 hover:scale-105 active:scale-95">
-                                    <GoogleLogin
-                                        onSuccess={onGoogleSuccess}
-                                        onError={onGoogleError}
-                                        size="large"
-                                        theme={isDarkMode ? 'filled_blue' : 'outline'}
-                                    />
+                                style={{ transitionDelay: '600ms' }}>
+                                <div className="transition-all w-full duration-300 hover:scale-105 active:scale-95">
+                                    <button
+                                        onClick={onGoogleSuccess}
+                                        className="
+                                            w-full flex items-center justify-center gap-3 px-6 py-3.5 
+                                            bg-white dark:bg-gray-800 
+                                            border border-gray-200 dark:border-gray-600 
+                                            rounded-lg shadow-sm hover:shadow-md dark:hover:shadow-lg
+                                            text-gray-700 dark:text-gray-200 
+                                            font-medium text-sm
+                                            transition-all duration-300 ease-in-out
+                                            hover:bg-gray-50 dark:hover:bg-gray-700
+                                            hover:border-gray-300 dark:hover:border-gray-500
+                                            focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800
+                                            active:scale-95
+                                        "
+                                    >
+                                        <FcGoogle className="w-5 h-5" />
+                                        <span>Continue with Google</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         <div className={`mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 text-center transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                             style={{ transitionDelay: '700ms' }}>
+                            style={{ transitionDelay: '700ms' }}>
                             <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                                 By {isSignup ? 'signing up' : 'signing in'}, you agree to our{' '}
                                 <span className="text-purple-600 dark:text-purple-400 hover:underline cursor-pointer transition-all duration-200 hover:text-purple-700 dark:hover:text-purple-300">Terms</span>

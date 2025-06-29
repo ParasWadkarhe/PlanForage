@@ -4,17 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 const IntroPage = () => {
   const [visibleSections, setVisibleSections] = useState(new Set());
-  const [isButtonPressed, setIsButtonPressed] = useState(false);
   const sectionsRef = useRef({});
   const navigate = useNavigate()
-
-  const handleContinue = () => {
-    // setIsButtonPressed(true);
-  };
-
-  const handleLogin = () => {
-    alert('Navigating to login page...');
-  };
 
   // Intersection Observer for scroll animations
   useEffect(() => {

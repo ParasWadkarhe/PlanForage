@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
 import { Search, ArrowRight, MapPin, DollarSign, Loader2, Zap, TrendingUp, FileText, Clock, RotateCcw } from 'lucide-react';
 import axios from 'axios'
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../firebase/AuthContext';
 import { AppContext } from '../../context/AppContext';
 
 
 export default function SearchPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
-    const { userInfo } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const { setProjectData, searchData, setSearchData } = useContext(AppContext)
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export default function SearchPage() {
                     search_string: searchData?.search_string,
                     location: searchData?.location,
                     budget: searchData?.budget,
-                    uid: userInfo?.sub,
+                    uid: user?.uid,
                     _id: searchData?._id || null
                 });
                 setProjectData(response.data);

@@ -3,22 +3,23 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from './context/AuthContext';
+import { AuthContext } from './firebase/AuthContext';
 import LoadingScreen from './components/LoadingScreen'
 import IntroPage from './components/IntroPage';
 import axios from 'axios'
 
 const ProtectedRoute = ({ children }) => {
-    const { userInfo } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!user) {
             navigate("/login");
         }
-    }, [userInfo, navigate]);
+    }, [user, navigate]);
 
-    return userInfo ? children : null;
+
+    return user ? children : null;
 }
 
 const App = () => {

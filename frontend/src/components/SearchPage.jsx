@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 export default function SearchPage({ searchHandler }) {
     const [isLoading, setIsLoading] = useState(false);
     const [searchData, setSearchData] = useState({search_string: '', location: '', budget: ''})
-    const { userInfo } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -23,7 +23,7 @@ export default function SearchPage({ searchHandler }) {
                     search_string: searchData?.search_string,
                     location: searchData?.location,
                     budget: searchData?.budget,
-                    uid: userInfo?.sub,
+                    uid: user?.uid,
                     _id: searchData?._id || null
                 });
                 searchHandler(response.data);
