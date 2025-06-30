@@ -1,7 +1,6 @@
  const mongoose = require('mongoose')
-const { Schema } = mongoose
 
-const UserDashboardSchema = new Schema({
+const UserDashboardSchema = new mongoose.Schema({
     uid: {
         type: String
     },

@@ -11,6 +11,12 @@ const proposalFromId = require('./routes/proposalFromId.js')
 const downloadPdf = require('./routes/downloadPdf.js');
 const deleteProposal = require('./routes/deleteProposal.js');
 const userDashboard = require('./routes/userDashboard.js');
+const { uploadDocument, uploadDocumentMiddleware } = require('./routes/uploadDocument.js');
+const getDocuments = require('./routes/getDocuments.js');
+const deleteDocument = require('./routes/deleteDocument.js');
+
+// middleware
+const verifyToken = require('./middleware/verifyToken.js');
 
 // config
 const app = express();
@@ -28,21 +34,24 @@ app.use(express.json());
 app.use(cors({
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 
 // routes
 app.get('/', (req, res) => {
     // this route is for client to check whether the backend is running
-    res.json({isRunning: true, message: 'Backend running...'});
+    res.json({ isRunning: true, message: 'Backend running...' });
 });
-app.post('/query', query)
-app.get('/search-history/:uid', getSearchHistory)
-app.get('/fetch-proposal/:id', proposalFromId)
-app.post('/download-pdf', downloadPdf)
-app.delete('/delete-proposal/:id', deleteProposal)
-app.get('/user-dashboard/:uid', userDashboard)
+app.post('/query', verifyToken, query)
+app.get('/search-history', verifyToken, getSearchHistory)
+app.get('/proposal/:id', verifyToken, proposalFromId)
+app.delete('/proposal/:id', verifyToken, deleteProposal)
+app.post('/download-pdf', verifyToken, downloadPdf)
+app.get('/user-dashboard', verifyToken, userDashboard)
+app.post('/document', verifyToken, uploadDocumentMiddleware, uploadDocument)
+app.get('/documents', verifyToken, getDocuments)
+app.delete('/document/:id', verifyToken, deleteDocument)
 
 // app
 app.listen(PORT, () => {

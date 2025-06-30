@@ -1,6 +1,4 @@
-require("dotenv").config();
 const ProjectProposalModel = require("../models/ProjectProposal.js");
-
 
 async function getSearchHistory(req, res) {
     const id = req.params.id;

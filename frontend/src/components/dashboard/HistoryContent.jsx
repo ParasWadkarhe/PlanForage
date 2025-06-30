@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Trash2, Loader2, FileText, Search, Filter, X, Calendar, Pencil } from "lucide-react";
+import { Trash2, Loader2, History, Search, Filter, X, Calendar, Pencil } from "lucide-react";
 
 import { AuthContext } from "../../firebase/AuthContext";
 import { AppContext } from "../../context/AppContext";
@@ -14,7 +14,7 @@ const HistoryContent = () => {
     const [budgetFilter, setBudgetFilter] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
     const { user } = useContext(AuthContext)
-    const {setProjectData, setActiveTab, setSearchData} = useContext(AppContext)
+    const { setProjectData, setActiveTab, setSearchData } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
@@ -25,13 +25,22 @@ const HistoryContent = () => {
     const handleViewHistory = async (searchData) => {
         setIsLoading(true)
         try {
-            const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/query', {
-                search_string: searchData?.search_string,
-                location: searchData?.location,
-                budget: searchData?.budget,
-                uid: user?.uid,
-                _id: searchData?._id || null
-            });
+            const idToken = await user.getIdToken();
+            const response = await axios.post(
+                import.meta.env.VITE_BACKEND_URL + '/query',
+                {
+                    search_string: searchData?.search_string,
+                    location: searchData?.location,
+                    budget: searchData?.budget,
+                    _id: searchData?._id || null
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
             setProjectData(response.data)
             setActiveTab('search')
         } catch (error) {
@@ -45,11 +54,16 @@ const HistoryContent = () => {
         try {
             setSearchHistory(prevHistory => prevHistory.filter(item => item._id !== itemId));
 
-            axios.delete(import.meta.env.VITE_BACKEND_URL + '/delete-proposal/' + itemId)
-                .then()
-                .catch(error => {
-                    console.error('Error deleting search history:', error);
-                });
+            const idToken = await user.getIdToken();
+            await axios.delete(
+                import.meta.env.VITE_BACKEND_URL + '/proposal/' + itemId,
+                {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
         } catch (error) {
             console.error('Error deleting search history:', error);
         }
@@ -61,7 +75,7 @@ const HistoryContent = () => {
 
         // Apply search query filter
         if (searchQuery.trim()) {
-            filtered = filtered.filter(item => 
+            filtered = filtered.filter(item =>
                 item.search_string?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 item.location?.toLowerCase().includes(searchQuery.toLowerCase())
             );
@@ -92,28 +106,36 @@ const HistoryContent = () => {
         setFilteredHistory(filtered);
     }, [searchHistory, searchQuery, dateFilter, budgetFilter]);
 
-    // show search history
+    // show search history with Firebase auth token
     useEffect(() => {
-        if(!user) return;
+        if (!user) return;
 
-        axios.get(import.meta.env.VITE_BACKEND_URL + '/search-history/' + user?.uid)
-            .then(response => {
+        (async () => {
+            try {
+                const idToken = await user.getIdToken();
+                const response = await axios.get(
+                    import.meta.env.VITE_BACKEND_URL + '/search-history',
+                    {
+                        headers: {
+                            Authorization: `Bearer ${idToken}`,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
                 setSearchHistory(response.data.proposals || []);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching search history:', error);
-            });
+            }
+        })();
 
-        return () => {
-
-        }
+        return () => { };
     }, [user]);
 
     const formatDate = (dateString) => {
         try {
             return new Date(dateString).toLocaleDateString();
         } catch (error) {
-            return dateString; 
+            return dateString;
         }
     };
 
@@ -164,7 +186,7 @@ const HistoryContent = () => {
                 <h2 className={`text-2xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                     Search History
                 </h2>
-                
+
                 {/* Search Bar and Filter Button */}
                 <div className={`mb-6 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <div className="flex gap-3">
@@ -180,17 +202,16 @@ const HistoryContent = () => {
                         </div>
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] active:scale-95 hover:-translate-y-1 hover:shadow-md group ${
-                                showFilters 
-                                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' 
+                            className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] active:scale-95 hover:-translate-y-1 hover:shadow-md group ${showFilters
+                                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
                                     : 'text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
-                            } ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                                } ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                         >
                             <Filter className="h-4 w-4 transition-transform duration-200 group-hover:scale-[1.01]" />
                             <span className="hidden sm:inline">Filters</span>
                         </button>
                     </div>
-                    
+
                     {(searchQuery || dateFilter || budgetFilter) && (
                         <div className={`mt-3 flex justify-end transition-all duration-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                             <button
@@ -242,7 +263,7 @@ const HistoryContent = () => {
                         </div>
                     </div>
                 )}
-                
+
                 {filteredHistory.length === 0 ? (
                     <div className={`text-center py-8 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         <p className="text-gray-600 dark:text-gray-400">
@@ -252,12 +273,16 @@ const HistoryContent = () => {
                 ) : (
                     <div className={`space-y-4 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         {filteredHistory.map((item, index) => (
-                            <div 
-                                key={item._id || index} 
-                                className={`flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/20 group ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                            <div
+                                key={item._id || index}
+                                className={`flex items-center gap-3 justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/20 group ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                                 style={{ transitionDelay: `${100 + index * 100}ms` }}
                                 onClick={() => handleViewHistory(item)}
                             >
+                                <div className="w-10 h-10  bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                                    <History className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                </div>
+
                                 <div className="flex-1">
                                     <p className="text-gray-900 dark:text-white font-medium mb-1 transition-colors duration-200 group-hover:text-purple-600 dark:group-hover:text-purple-400">
                                         {item.search_string || 'No search query'}
@@ -274,9 +299,9 @@ const HistoryContent = () => {
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-3">
-                                        <button 
+                                        <button
                                             onClick={(e) => {
-                                                e.stopPropagation(); 
+                                                e.stopPropagation();
                                                 setSearchData(item)
                                                 setProjectData(null)
                                                 setActiveTab('search')
@@ -287,7 +312,7 @@ const HistoryContent = () => {
                                             <Pencil size={18} className="transition-transform duration-200 group-hover:rotate-12" />
                                         </button>
 
-                                        <button 
+                                        <button
                                             onClick={(e) => {
                                                 e.stopPropagation(); // Prevent triggering handleViewHistory
                                                 handleDeleteHistory(item._id);

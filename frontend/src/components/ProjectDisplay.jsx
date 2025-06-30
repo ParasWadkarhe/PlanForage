@@ -2,11 +2,12 @@ import { useContext, useState } from 'react';
 import { ArrowLeft, Download, Calendar, Users, DollarSign, Code, Target, Package, Clock, CheckCircle, Server, Database, Monitor, Globe, Smartphone, Shield, ChevronDown, ChevronUp, FileText, Briefcase, Settings } from 'lucide-react';
 import axios from 'axios'
 import { AppContext } from '../context/AppContext';
-
+import { AuthContext } from '../firebase/AuthContext';
 
 export default function ProjectDisplay() {
 
     const { projectData, setProjectData } = useContext(AppContext);
+    const { user } = useContext(AuthContext)
 
     const [expandedSections, setExpandedSections] = useState({
         modules: false,
@@ -42,27 +43,35 @@ export default function ProjectDisplay() {
 
     const [isDownloading, setIsDownloading] = useState(false);
 
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async () => {
         setIsDownloading(true);
 
-        axios.post(import.meta.env.VITE_BACKEND_URL + '/download-pdf',
-            { data: projectData },
-            { responseType: 'blob' },
-        )
-            .then((response) => {
-                const blob = new Blob([response.data], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `${projectData.project_title}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
-            })
-            .catch((error) => {
-                console.error('PDF download failed:', error);
-            })
+        try {
+            const idToken = await user.getIdToken(); // Get Firebase token
 
+            const response = await axios.post(
+                import.meta.env.VITE_BACKEND_URL + '/download-pdf',
+                { data: projectData },
+                {
+                    responseType: 'blob',
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${projectData.project_title}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        } catch (error) {
+            console.error('PDF download failed:', error);
+        }
 
         setTimeout(() => {
             setIsDownloading(false);

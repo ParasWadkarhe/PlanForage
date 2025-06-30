@@ -27,19 +27,27 @@ export default function SearchPage() {
         if (searchData.search_string.trim() && !isLoading) {
             setIsLoading(true);
             try {
-                const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/query', {
-                    search_string: searchData?.search_string,
-                    location: searchData?.location,
-                    budget: searchData?.budget,
-                    uid: user?.uid,
-                    _id: searchData?._id || null
-                });
+                const idToken = await user.getIdToken();
+                const response = await axios.post(
+                    import.meta.env.VITE_BACKEND_URL + '/query',
+                    {
+                        search_string: searchData?.search_string,
+                        location: searchData?.location,
+                        budget: searchData?.budget,
+                        _id: searchData?._id || null
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${idToken}`,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
                 setProjectData(response.data);
             } catch (error) {
                 console.error('Error fetching search results:', error);
             } finally {
                 setIsLoading(false);
-
             }
         }
     };

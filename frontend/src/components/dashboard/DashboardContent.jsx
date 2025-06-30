@@ -26,6 +26,7 @@ const DashboardContent = () => {
         }
     };
 
+
     const handleThemeToggle = () => {
         document.documentElement.classList.toggle('dark');
         setIsDarkMode(prevMode => {
@@ -48,9 +49,20 @@ const DashboardContent = () => {
         setTimeout(() => setIsLoaded(true), 100);
     }, []);
 
+    // Fetch user dashboard data
     useEffect(() => {
         if (!user || !user?.uid) return
-        axios.get(import.meta.env.VITE_BACKEND_URL + `/user-dashboard/${user.uid}`)
+
+        (async function () {
+            const idToken = await user.getIdToken()
+            axios.get(import.meta.env.VITE_BACKEND_URL + `/user-dashboard`,
+            {
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        )
             .then(response => {
                 setDashboardData(response.data);
             })
@@ -58,7 +70,7 @@ const DashboardContent = () => {
                 console.error("Error fetching user dashboard data:", error);
             }
             );
-
+        })();
     }, [user])
 
     const [imageError, setImageError] = useState(false);
@@ -69,9 +81,9 @@ const DashboardContent = () => {
             <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-purple-100 dark:border-purple-800 p-6 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-1 ${isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        {user.auth.currentUser.photoURL && !imageError ? (
+                        {user.photoURL && !imageError ? (
                             <img
-                                src={user.auth.currentUser.photoURL}
+                                src={user.photoURL}
                                 alt="Profile"
                                 onError={() => setImageError(true)}
                                 className="w-12 h-12 rounded-xl "
@@ -82,7 +94,7 @@ const DashboardContent = () => {
 
                         <div className={`transition-all duration-600 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                                Welcome back, {user.auth.currentUser.displayName.split(' ')[0]}!
+                                Welcome back, {user.displayName.split(' ')[0]}!
                             </h2>
                         </div>
                     </div>

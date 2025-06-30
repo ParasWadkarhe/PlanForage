@@ -4,7 +4,7 @@ const ProjectProposalModel = require("../models/ProjectProposal.js");
 const UserDashboard = require('../models/UserDashboard.js')
 
 // utility imports
-const removeAllIds = require("./utils/removeAllIds.js");
+const removeAllIds = require('../utils/removeAllIds.js')
 const generatePrompt = require('../templates/prompt.js')
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
@@ -13,7 +13,7 @@ async function query(req, res) {
 
     // update search count even if it fails
     await UserDashboard.updateOne(
-        { uid: req.body.uid }, 
+        { uid: req.user.uid }, 
         { $inc: { searchCount: 1, } },
         { upsert: true }  
     )
@@ -43,19 +43,18 @@ async function query(req, res) {
 
         try {
             const parsedJSON = JSON.parse(cleanedText);
-            const uid = req.body.uid // this will be fetched from authentication token when set up
 
             // Save the proposal to the database only if there is no error in the response
             if(parsedJSON && !parsedJSON.error) {
                 const proposal = new ProjectProposalModel({
-                    uid: uid, 
+                    uid: req.user.uid, 
                     ...req.body,
                     ...parsedJSON,
                 });
                 await proposal.save();
 
                 await UserDashboard.updateOne(
-                    { uid: uid }, 
+                    { uid: req.user.uid }, 
                     { $inc: { plansCreated: 1, }},
                     { upsert: true }  
                 , { upsert: true }

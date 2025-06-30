@@ -2,7 +2,7 @@ const ProjectProposalModel = require("../models/ProjectProposal.js");
 
 async function getSearchHistory(req, res) {
   try {
-    const uid = req.params.uid;
+    const uid = req.user.uid;
     if (!uid) {
       return res.status(400).json({ error: "User ID is required" });
     }
