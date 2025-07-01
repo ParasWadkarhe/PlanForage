@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser.auth.currentUser);
+      setUser(firebaseUser);
       setLoading(false);
     });
     return () => unsub();

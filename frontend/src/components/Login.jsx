@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, Eye, EyeOff, Mail, Lock, User, ArrowRight, Chrome } from 'lucide-react';
+import { Zap, Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase/config';
@@ -62,6 +62,7 @@ function LoginButton() {
             navigate('/home');
         } catch (err) {
             alert('Google login failed');
+            console.log(err)
         }
     };
 

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { ArrowLeft, Download, Calendar, Users, DollarSign, Code, Target, Package, Clock, CheckCircle, Server, Database, Monitor, Globe, Smartphone, Shield, ChevronDown, ChevronUp, FileText, Briefcase, Settings } from 'lucide-react';
+import { ArrowLeft, Download, Calendar, Users, DollarSign, Code, Target, Package, CheckCircle, Server, Database, Monitor, Globe, Smartphone, Shield, ChevronDown, ChevronUp, FileText, Briefcase, Settings } from 'lucide-react';
 import axios from 'axios'
 import { AppContext } from '../context/AppContext';
 import { AuthContext } from '../firebase/AuthContext';
@@ -41,10 +41,10 @@ export default function ProjectDisplay() {
         return `$${amount}`;
     };
 
-    const [isDownloading, setIsDownloading] = useState(false);
+    // const [isDownloading, setIsDownloading] = useState(false);
 
     const handleDownloadPDF = async () => {
-        setIsDownloading(true);
+        // setIsDownloading(true);
 
         try {
             const idToken = await user.getIdToken(); // Get Firebase token
@@ -73,9 +73,9 @@ export default function ProjectDisplay() {
             console.error('PDF download failed:', error);
         }
 
-        setTimeout(() => {
-            setIsDownloading(false);
-        }, 2000);
+        // setTimeout(() => {
+        //     setIsDownloading(false);
+        // }, 2000);
     };
 
     return (

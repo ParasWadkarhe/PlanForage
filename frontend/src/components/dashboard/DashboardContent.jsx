@@ -26,7 +26,6 @@ const DashboardContent = () => {
         }
     };
 
-
     const handleThemeToggle = () => {
         document.documentElement.classList.toggle('dark');
         setIsDarkMode(prevMode => {
