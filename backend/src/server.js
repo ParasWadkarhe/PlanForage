@@ -14,6 +14,7 @@ const userDashboard = require('./routes/userDashboard.js');
 const { uploadDocument, uploadDocumentMiddleware } = require('./routes/uploadDocument.js');
 const getDocuments = require('./routes/getDocuments.js');
 const deleteDocument = require('./routes/deleteDocument.js');
+const documentSearch = require('./routes/documentSearch.js');
 
 // middleware
 const verifyToken = require('./middleware/verifyToken.js');
@@ -52,6 +53,7 @@ app.get('/user-dashboard', verifyToken, userDashboard)
 app.post('/document', verifyToken, uploadDocumentMiddleware, uploadDocument)
 app.get('/documents', verifyToken, getDocuments)
 app.delete('/document/:id', verifyToken, deleteDocument)
+app.post('/document-search', verifyToken, documentSearch)
 
 // app
 app.listen(PORT, () => {

@@ -16,6 +16,7 @@ const HistoryContent = () => {
     const { user } = useContext(AuthContext)
     const { setProjectData, setActiveTab, setSearchData } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState(false)
+    const [deletingItemId, setDeletingItemId] = useState(null);
 
     useEffect(() => {
         // Trigger load animation
@@ -52,10 +53,10 @@ const HistoryContent = () => {
 
     const handleDeleteHistory = async (itemId) => {
         try {
-            setSearchHistory(prevHistory => prevHistory.filter(item => item._id !== itemId));
-
+            setDeletingItemId(itemId);
+            
             const idToken = await user.getIdToken();
-            await axios.delete(
+            const response = await axios.delete(
                 import.meta.env.VITE_BACKEND_URL + '/proposal/' + itemId,
                 {
                     headers: {
@@ -64,8 +65,14 @@ const HistoryContent = () => {
                     }
                 }
             );
+            if(!response.data.error) {
+                setSearchHistory(prevHistory => prevHistory.filter(item => item._id !== itemId));
+                console.error('Failed to delete search history');
+            }
         } catch (error) {
             console.error('Error deleting search history:', error);
+        } finally {
+            setDeletingItemId(null);
         }
     };
 
@@ -203,8 +210,8 @@ const HistoryContent = () => {
                         <button
                             onClick={() => setShowFilters(!showFilters)}
                             className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] active:scale-95 hover:-translate-y-1 hover:shadow-md group ${showFilters
-                                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
-                                    : 'text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                                ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                                : 'text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
                                 } ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                         >
                             <Filter className="h-4 w-4 transition-transform duration-200 group-hover:scale-[1.01]" />
@@ -275,7 +282,7 @@ const HistoryContent = () => {
                         {filteredHistory.map((item, index) => (
                             <div
                                 key={item._id || index}
-                                className={`flex items-center gap-3 justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/20 group ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                                className={`flex items-center gap-3 justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/20 group ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${deletingItemId === item._id ? 'opacity-50' : ''}`}
                                 style={{ transitionDelay: `${100 + index * 100}ms` }}
                                 onClick={() => handleViewHistory(item)}
                             >
@@ -317,10 +324,18 @@ const HistoryContent = () => {
                                                 e.stopPropagation(); // Prevent triggering handleViewHistory
                                                 handleDeleteHistory(item._id);
                                             }}
-                                            className="p-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 hover:scale-[1.01] active:scale-95 group"
-                                            title="Delete"
+                                            disabled={deletingItemId === item._id}
+                                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors duration-200 p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg group disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 hover:scale-[1.01] active:scale-95"
+                                            title={deletingItemId === item._id ? "Deleting..." : "Delete"}
                                         >
-                                            <Trash2 size={18} className="transition-transform duration-200 group-hover:shake" />
+                                            {deletingItemId === item._id ? (
+                                                <>
+                                                    <div className="w-4 h-4 border-2 border-red-600 dark:border-red-400 border-t-transparent rounded-full animate-spin"></div>
+                                                    <span className="text-xs">Deleting...</span>
+                                                </>
+                                            ) : (
+                                                <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                                            )}
                                         </button>
                                     </div>
                                 </div>

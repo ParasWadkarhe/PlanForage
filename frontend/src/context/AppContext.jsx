@@ -4,7 +4,7 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [projectData, setProjectData] = useState(null);
-  const [activeTab, setActiveTab] = useState('dashboard')
+  const [activeTab, setActiveTab] = useState('dashboard') // dashboaord, search, upload, documents
   const [searchData, setSearchData] = useState({
     search_string: 'mobile app like youtube',
         location: 'mumbai',

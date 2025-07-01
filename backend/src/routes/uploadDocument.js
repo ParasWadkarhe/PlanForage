@@ -45,7 +45,7 @@ async function uploadDocument(req, res) {
         });
         await document.save();
     
-        res.json({ message: "File received", name: file.originalname, response });
+        res.json({ message: "File received", document });
     } 
     catch (error) {
         console.error("Error uploading file:", error);
