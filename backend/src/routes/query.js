@@ -38,7 +38,6 @@ async function query(req, res) {
 
         try {
             const parsedJSON = JSON.parse(cleanedText);
-            console.log('parsed json: ', parsedJSON)
 
             // Save the proposal to the database only if there is no error in the response
             if(parsedJSON && !parsedJSON.error) {
