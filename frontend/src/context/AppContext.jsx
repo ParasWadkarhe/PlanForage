@@ -6,9 +6,9 @@ export const AppProvider = ({ children }) => {
   const [projectData, setProjectData] = useState(null);
   const [activeTab, setActiveTab] = useState('dashboard') // dashboaord, search, upload, documents
   const [searchData, setSearchData] = useState({
-    search_string: 'jsfjsdfjhbsfhbsfh',
-        location: 'mumbai',
-        budget: '40000'
+    search_string: '',
+        location: '',
+        budget: ''
   })
   const [dashboardData, setDashboardData] = useState(null)
   const [inputType, setInputType] = useState('text')

@@ -110,13 +110,12 @@ const IntroPage = () => {
       description: "Download proposals in multiple formats (PDF, Word, Excel)"
     }
   ];
-
-  const stats = [
-    { number: "10,000+", label: "Proposals Generated" },
-    { number: "95%", label: "Client Satisfaction" },
-    { number: "50+", label: "Industries Covered" },
-    { number: "24/7", label: "AI Support" }
-  ];
+const stats = [
+  { number: "50+", label: "Proposals Generated" },
+  { number: "92%", label: "Client Satisfaction" },
+  { number: "10+", label: "Industries Served" },
+  { number: "24/7", label: "AI-Powered Support" }
+];
 
   const testimonials = [
     {
@@ -158,6 +157,8 @@ const IntroPage = () => {
               PlanForage
             </h1>
           </div>
+
+          
           
           <button
             onClick={() => {
@@ -374,7 +375,7 @@ const IntroPage = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section 
+        {/* <section 
           id="testimonials"
           ref={setSectionRef('testimonials')}
           className={`mb-16 transition-all duration-1000 ease-out ${
@@ -412,7 +413,7 @@ const IntroPage = () => {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* Call to Action */}
         <section 
@@ -441,9 +442,9 @@ const IntroPage = () => {
                 Start Creating Now
                 <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-2" />
               </button>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              {/* <div className="text-sm text-gray-500 dark:text-gray-400">
                 No credit card required • Free trial available
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

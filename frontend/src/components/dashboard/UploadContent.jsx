@@ -237,7 +237,8 @@ const UploadContent = () => {
                 type="file"
                 onChange={handleFileSelect}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                // accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                accept=".pdf"
               />
 
               <div className="pointer-events-none relative z-0">

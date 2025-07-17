@@ -42,7 +42,10 @@ app.use(cors({
 // routes
 app.get('/', (req, res) => {
     // this route is for client to check whether the backend is running
-    res.json({ isRunning: true, message: 'Backend running...' });
+    setTimeout(() => {
+        
+        res.json({ isRunning: true, message: 'Backend running...' });
+    }, 0);
 });
 app.post('/query', verifyToken, query)
 app.get('/search-history', verifyToken, getSearchHistory)

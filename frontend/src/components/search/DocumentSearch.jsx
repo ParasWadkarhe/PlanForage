@@ -244,7 +244,7 @@ const DocumentSearch = () => {
             isVisible("features-section") ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
           }`}
         >
-          <div className="text-center mb-8">
+          <div className="text-center">
             <Zap className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-4 animate-pulse" />
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">AI Document Analysis</h3>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">

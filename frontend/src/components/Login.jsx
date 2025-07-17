@@ -217,7 +217,7 @@ function Login() {
                 </div>
                 <p className="text-xl text-purple-100 mb-8 leading-relaxed">
                   Transform your project ideas into comprehensive, professional proposals with the power of AI. Join
-                  thousands of professionals who trust PlanForage for their project planning needs.
+                  professionals who trust PlanForage for their project planning needs.
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="flex -space-x-2">
@@ -231,7 +231,7 @@ function Login() {
                     ))}
                   </div>
                   <div>
-                    <p className="text-white font-semibold">10,000+ Happy Users</p>
+                    {/* <p className="text-white font-semibold">10,000+ Happy Users</p> */}
                     <p className="text-purple-100 text-sm">Trusted by professionals worldwide</p>
                   </div>
                 </div>
@@ -465,7 +465,7 @@ function Login() {
                   )}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-purple-100 dark:border-purple-700 text-center">
+                {/* <div className="mt-8 pt-6 border-t border-purple-100 dark:border-purple-700 text-center">
                   <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                     By {isSignup ? "signing up" : "signing in"}, you agree to our{" "}
                     <span className="text-purple-600 dark:text-purple-400 hover:underline cursor-pointer transition-all duration-200 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
@@ -476,7 +476,7 @@ function Login() {
                       Privacy Policy
                     </span>
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
