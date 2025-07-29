@@ -88,7 +88,11 @@ const ProjectProposalSchema = new Schema({
   steps: [StepSchema],
   estimated_pricing: EstimatedPricingSchema,
   payment_schedule: [PaymentScheduleSchema],
-  conclusion: String
+  conclusion: String,
+  date: { 
+    type: Date, 
+    default: Date.now   
+  } 
 });
 
 module.exports = mongoose.model("ProjectProposal", ProjectProposalSchema);

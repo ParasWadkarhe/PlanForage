@@ -1,7 +1,4 @@
-
 const ProjectProposalModel = require("../models/ProjectProposal.js");
-
-
 
 const deleteProposal =  async (req, res) => {
   const id = req.params.id;
@@ -17,7 +14,7 @@ const deleteProposal =  async (req, res) => {
     res.status(200).json({ message: "Proposal deleted successfully" });
   } catch (error) {
     console.error('Error deleting proposal:', error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Error deleting proposal" });
   }
 }
 

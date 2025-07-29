@@ -2,7 +2,7 @@ const ProjectProposalModel = require("../models/ProjectProposal.js");
 
 async function getSearchHistory(req, res) {
   try {
-    const uid = req.params.uid;
+    const uid = req.user.uid;
     if (!uid) {
       return res.status(400).json({ error: "User ID is required" });
     }
@@ -10,7 +10,8 @@ async function getSearchHistory(req, res) {
     const proposals = await ProjectProposalModel.find({ uid }).select([
       "search_string",
       "budget",
-      "location"
+      "location",
+      "date"
     ]);
 
     return res.status(200).json({ proposals });

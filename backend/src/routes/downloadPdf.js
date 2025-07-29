@@ -1,4 +1,4 @@
-
+require("dotenv").config();
 const axios = require('axios');
 const CloudConvert = require('cloudconvert');
 const fs = require('fs-extra');

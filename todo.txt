@@ -1,8 +1,15 @@
 DONE:
 // when clicked on history, add proper data in location and budget section as well - done
 // remove arrows in budget input
+// search history
+// dashboard -> search and filter proposals, search & user button in left sidebar
 
 TODO:
 // add links to hire developers, designers, etc. in the respective roles
+// refresh button for history and docuemnts tab
+// add recent searchs in sidebar
 
 https://plan-forage.vercel.app/
+
+
+
